@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/project_info"
+        android:icon="@mipmap/proj_name"
+        android:title="项目信息" />
+
+    <item
+        android:id="@+id/picture_info"
+        android:icon="@mipmap/picture"
+        android:title="照片" />
+
+    <item
+        android:id="@+id/word_info"
+        android:icon="@mipmap/notes"
+        android:title="笔录" />
+    <item
+        android:id="@+id/lookup"
+        android:icon="@mipmap/lookup"
+        android:title="审阅"/>
+
+
+</menu>

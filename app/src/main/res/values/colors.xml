@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#189ED7</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+
+    <!--RecyclerView -->
+    <color name="txt_color">#48495F</color>
+    <color name="color_light_blue">#00DDB6</color>
+
+    <!--SearchView-->
+    <color name="darkgray">#CCE5E3E3</color>
+    <color name="color_white">#FFFFFF</color>
+    <color name="btn_press_color">#5677fc</color>
+    <color name="btn_pressed_color">#3CA0EC</color>
+</resources>

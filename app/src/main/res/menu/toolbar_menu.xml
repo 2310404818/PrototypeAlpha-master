@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".PolicyLableActivity">
+    <item
+        android:title="全部政策"
+        app:showAsAction="never" />
+    <item
+        android:title="法律"
+        app:showAsAction="never" />
+    <item
+        android:title="行政法规"
+        app:showAsAction="never" />
+    <item
+        android:title="地方性法规"
+        app:showAsAction="never" />
+    <item
+        android:title="部门规章"
+        app:showAsAction="never" />
+    <item
+        android:title="地方政府规章"
+        app:showAsAction="never" />
+</menu>
