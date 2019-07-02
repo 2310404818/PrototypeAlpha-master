@@ -12,7 +12,7 @@ import com.swj.prototypealpha.R;
 /**
  *
  * 登陆界面
- *直接登陆
+ * 直接登陆
  * 手机号验证码登陆
  * 注册
  * 忘记密码
