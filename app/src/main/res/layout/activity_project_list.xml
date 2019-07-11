@@ -58,7 +58,7 @@
         app:layout_constraintStart_toStartOf="@+id/constraintLayout6"
         app:layout_constraintTop_toTopOf="@+id/constraintLayout6" />
 
-    <android.support.v7.widget.RecyclerView
+    <ListView
         android:id="@+id/rv_project_list"
         android:layout_width="0dp"
         android:layout_height="0dp"

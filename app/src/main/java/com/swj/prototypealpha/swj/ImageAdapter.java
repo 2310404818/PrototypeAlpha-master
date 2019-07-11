@@ -13,6 +13,10 @@ import com.swj.prototypealpha.swj.util.OnItemPictureClickListener;
 
 import java.util.List;
 
+/**
+ * 检查记录
+ * 添加照片适配器
+ */
 public class ImageAdapter extends RecyclerView.Adapter<ImageHodler>{
 
     private Context context;

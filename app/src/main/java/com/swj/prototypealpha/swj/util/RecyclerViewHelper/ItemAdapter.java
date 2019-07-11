@@ -2,9 +2,13 @@ package com.swj.prototypealpha.swj.util.RecyclerViewHelper;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -12,12 +16,19 @@ import com.swj.prototypealpha.R;
 import com.swj.prototypealpha.swj.util.ItemBean;
 import com.swj.prototypealpha.swj.util.OnItemClickListener;
 
+import java.util.ArrayList;
 import java.util.List;
+
+/**
+ *itemBean实体类、item_view自定义控件对应的适配器
+ *重写了oncreateViewHolder和onBindViewHorder方法
+ *
+ */
+
 
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> implements View.OnClickListener
 {
     private List<ItemBean> itemAdapterList;
-
     private OnItemClickListener itemClickListener;
 
     public  ItemAdapter(List<ItemBean> itemBeans)
@@ -34,6 +45,13 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> im
         return holder;
     }
 
+    /**
+     *   recyclerView机制，重写该方法，用于局部刷新
+     *   同时Tag用来复用
+     *
+     *
+     */
+
     @Override
     public void onBindViewHolder(@NonNull ItemAdapter.ViewHolder viewHolder, int i) {
         ItemBean itemBean = itemAdapterList.get(i);
@@ -42,6 +60,9 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> im
         viewHolder.left_image.setImageBitmap(itemBean.getLeft_image());
         viewHolder.right_image.setImageBitmap(itemBean.getRight_image());
         viewHolder.itemView.setTag(i);
+
+
+
     }
 
     @Override
@@ -62,6 +83,8 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> im
         this.itemClickListener= itemClickListener;
     }
 
+
+
     static class ViewHolder extends RecyclerView.ViewHolder
     {
         public TextView title;
@@ -80,4 +103,6 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> im
             right_image = itemView.findViewById(R.id.item_right_arrow);
         }
     }
+
+
 }

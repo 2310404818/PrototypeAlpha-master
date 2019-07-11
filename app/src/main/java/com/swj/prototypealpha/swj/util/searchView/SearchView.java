@@ -1,5 +1,6 @@
 package com.swj.prototypealpha.swj.util.searchView;
 
+import android.app.Activity;
 import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -11,6 +12,8 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -18,11 +21,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.swj.prototypealpha.R;
-
-
-/**
- * Created by yetwish on 2015-05-11
- */
 
 public class SearchView extends LinearLayout implements View.OnClickListener {
 
@@ -36,6 +34,10 @@ public class SearchView extends LinearLayout implements View.OnClickListener {
      */
     private ImageView ivDelete;
 
+    /**
+     * 返回按钮
+     */
+    private Button btnBack;
 
     /**
      * 上下文对象
@@ -81,6 +83,7 @@ public class SearchView extends LinearLayout implements View.OnClickListener {
     private void initViews() {
         etInput = (EditText) findViewById(R.id.search_et_input);
         ivDelete = (ImageView) findViewById(R.id.search_iv_delete);
+  //      btnBack = (Button) findViewById(R.id.search_btn_back);
         lvTips = (ListView) findViewById(R.id.search_lv_tips);
 
         lvTips.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -97,6 +100,7 @@ public class SearchView extends LinearLayout implements View.OnClickListener {
         });
 
         ivDelete.setOnClickListener(this);
+        btnBack.setOnClickListener(this);
 
         etInput.addTextChangedListener(new EditChangedListener());
         etInput.setOnClickListener(this);
@@ -185,6 +189,9 @@ public class SearchView extends LinearLayout implements View.OnClickListener {
                 etInput.setText("");
                 ivDelete.setVisibility(GONE);
                 break;
+//            case R.id.search_btn_back:
+  //              ((Activity) mContext).finish();
+  //              break;
         }
     }
 
@@ -214,4 +221,3 @@ public class SearchView extends LinearLayout implements View.OnClickListener {
     }
 
 }
-

@@ -15,18 +15,17 @@
         android:theme="?attr/actionBarTheme"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" >
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="通知列表"
+            android:textColor="@color/color_white"
+            android:textSize="24sp" />
+    </android.support.v7.widget.Toolbar>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="通知详情"
-        android:textColor="@android:color/white"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="@+id/toolbar_info_notice"
-        app:layout_constraintEnd_toEndOf="@+id/toolbar_info_notice"
-        app:layout_constraintStart_toStartOf="@+id/toolbar_info_notice"
-        app:layout_constraintTop_toTopOf="@+id/toolbar_info_notice" />
 
     <TextView
         android:id="@+id/tv_noticeinfo_title"

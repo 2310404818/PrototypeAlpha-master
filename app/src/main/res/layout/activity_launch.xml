@@ -7,7 +7,7 @@
     tools:context=".swj.LaunchActivity">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/tlb_lanuch"
+        android:id="@+id/tlb_choose"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
@@ -23,10 +23,10 @@
         android:text="发起检查"
         android:textColor="@android:color/white"
         android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="@+id/tlb_lanuch"
-        app:layout_constraintEnd_toEndOf="@+id/tlb_lanuch"
-        app:layout_constraintStart_toStartOf="@+id/tlb_lanuch"
-        app:layout_constraintTop_toTopOf="@+id/tlb_lanuch" />
+        app:layout_constraintBottom_toBottomOf="@+id/tlb_choose"
+        app:layout_constraintEnd_toEndOf="@+id/tlb_choose"
+        app:layout_constraintStart_toStartOf="@+id/tlb_choose"
+        app:layout_constraintTop_toTopOf="@+id/tlb_choose" />
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/constraintLayout7"
@@ -36,7 +36,7 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline23"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tlb_lanuch">
+        app:layout_constraintTop_toBottomOf="@+id/tlb_choose">
 
     </android.support.constraint.ConstraintLayout>
 
@@ -65,7 +65,7 @@
 
     </android.support.constraint.ConstraintLayout>
 
-    <android.support.v7.widget.RecyclerView
+    <ListView
         android:id="@+id/recv_launch"
         android:layout_width="0dp"
         android:layout_height="0dp"

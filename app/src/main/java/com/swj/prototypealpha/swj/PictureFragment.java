@@ -34,7 +34,10 @@ import java.util.List;
 
 import static android.app.Activity.RESULT_FIRST_USER;
 
-
+/**
+ * 发起检查
+ * 照片工具类
+ */
 public class PictureFragment extends Fragment {
 
     public static final int                  TAKE_PHOTO  = 1;

@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
@@ -36,13 +37,22 @@ public class PolicyLableActivity extends AppCompatActivity {
     protected void onCreate (Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_policy_lable);
-        mToolbar = findViewById(R.id.toolbarPolicy);
+
         mListlView = findViewById(R.id.lv_policy);
         mSearchView = findViewById(R.id.sv_notice);
         initUI();
         initData();
+        initUIToolBar();
     }
+    private void initUIToolBar()
+    {
+        mToolbar = findViewById(R.id.toolbarPolicy);
+        setSupportActionBar( mToolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+    }
     @Override
     public boolean onCreateOptionsMenu (Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_menu, menu);
@@ -50,7 +60,7 @@ public class PolicyLableActivity extends AppCompatActivity {
     }
 
     private void initUI () {
-        mToolbar.inflateMenu(R.menu.toolbar_menu);
+
 
         myAdapter = new MyAdapter();
 
@@ -189,5 +199,15 @@ public class PolicyLableActivity extends AppCompatActivity {
                 }
             }
         }
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        if(item.getItemId() == android.R.id.home)
+        {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

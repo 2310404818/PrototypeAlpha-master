@@ -1,9 +1,11 @@
 package com.swj.prototypealpha.activity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.telephony.PhoneNumberUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -42,9 +44,13 @@ public class PhoneNumberLoginActivity extends AppCompatActivity implements View.
         setContentView(R.layout.activity_phone_number_login);
 
         initUI();
+
         m_TimeCount = new TimeCount(60000, 1000);
         setOnclickListener();
+
+
     }
+
 
     @Override
     public void onClick(View v) {

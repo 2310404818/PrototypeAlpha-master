@@ -19,6 +19,9 @@ import com.swj.prototypealpha.swj.util.RecyclerViewHelper.ItemAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 检查记录界面
+ */
 public class HistoryAccordActivity extends AppCompatActivity implements View.OnClickListener
 {
     Toolbar tlb_history;

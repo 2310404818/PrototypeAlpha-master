@@ -156,4 +156,6 @@
 \n\u3000\u3000第八十一条从事防洪活动，依照防洪法的规定执行。
 \n\u3000\u3000水污染防治，依照水污染防治法的规定执行。
 \n\u3000\u3000第八十二条本法自2002年10月1日起施行。</string>
+    <string name="title_activity_choose_check_person">ChooseCheckPerson</string>
+    <string name="title_activity_choose_person">ChoosePerson</string>
 </resources>

@@ -46,6 +46,9 @@ import java.util.List;
 
 import static com.swj.prototypealpha.swj.util.AlterDialogUtil.setAlterDialog;
 
+/**
+ * GPS定位签到界面
+ */
 public class AddLocActivity extends AppCompatActivity implements OnItemClickListener
 {
     private String TAG = "AddLocActivity";
@@ -223,7 +226,7 @@ public class AddLocActivity extends AppCompatActivity implements OnItemClickList
         }).start();
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recvv_checkloc.setLayoutManager(layoutManager);
-        adapter = new ItemAdapter(itemList);
+            adapter = new ItemAdapter(itemList);
 
         recvv_checkloc.setAdapter(adapter);
         adapter.setItemClickListener(this);

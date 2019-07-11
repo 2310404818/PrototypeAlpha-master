@@ -32,6 +32,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ * GPS签到
+ * 照片工具类
+ */
 public class TakePhotoActivity extends AppCompatActivity implements View.OnClickListener{
 
     private Toolbar tlb_upphoto;

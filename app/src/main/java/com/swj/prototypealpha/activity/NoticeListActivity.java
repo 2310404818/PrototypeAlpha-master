@@ -7,8 +7,10 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -26,24 +28,27 @@ import com.swj.prototypealpha.swj.util.RecyclerViewHelper.NoticeAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 通知列表界面   相关通知
+ * 提供搜索功能，模糊搜索
+ */
 public class NoticeListActivity extends AppCompatActivity {
     SearchView searchView;
     List<NoticeEntity> mData;
     List<NoticeEntity> old_Data;
     MyAdapter mAdapter;
-
+    Toolbar toolbar_title;
     private static final String TAG = NoticeListActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notice_list);
+        initUI();
         ListView mRecyclerView = findViewById(R.id.notice_list);
         mData = generateData(2);
         old_Data =mData;
         mAdapter = new MyAdapter();
-        //LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        //mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setAdapter(mAdapter);
         searchView = findViewById(R.id.sv_notice);
         searchView.setQueryHint("查询通知");
@@ -58,6 +63,7 @@ public class NoticeListActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        //软键盘相关设置
         searchView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,7 +84,7 @@ public class NoticeListActivity extends AppCompatActivity {
                 return true;
 
             }
-
+            //搜索框是否为空，为空更新为原本的，否则过滤
             @Override
             public boolean onQueryTextChange(String s) {
                 if (TextUtils.isEmpty(s)) {
@@ -95,7 +101,20 @@ public class NoticeListActivity extends AppCompatActivity {
 
 
     }
+    //toolbar左箭头设置
+    private void initUI()
+    {
+        toolbar_title = findViewById(R.id.toolbar_title);
+        setSupportActionBar(toolbar_title);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+    }
+
+    /**
+     * fiter进行过滤，模糊查询实现
+     */
     private class MyAdapter extends BaseAdapter implements Filterable{
         private MyFilter mFilter;
 
@@ -223,5 +242,15 @@ public class NoticeListActivity extends AppCompatActivity {
             return noticeEntities;
 
         }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        if(item.getItemId() == android.R.id.home)
+        {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
 }

@@ -14,6 +14,7 @@ public class ItemDragAdapter extends BaseItemDraggableAdapter<String, BaseViewHo
         super(R.layout.item_draggable_view, data);
     }
 
+
     @Override
     protected void convert(BaseViewHolder helper, String item) {
         switch (helper.getLayoutPosition() % 3) {

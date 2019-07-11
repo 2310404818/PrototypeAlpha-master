@@ -13,8 +13,17 @@
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
-        app:title="政策详情"
-        app:titleMarginStart="8dp"></android.support.v7.widget.Toolbar>
+        app:titleMarginStart="8dp">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="政策详情"
+            android:textColor="@color/color_white"
+            android:textSize="24sp" />
+    </android.support.v7.widget.Toolbar>
 
     <LinearLayout
         android:id="@+id/linearLayout"

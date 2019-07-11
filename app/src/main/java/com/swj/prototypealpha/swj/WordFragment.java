@@ -16,7 +16,10 @@ import android.widget.TextView;
 
 import com.swj.prototypealpha.R;
 
-
+/**
+ * 发起检查
+ * 笔录模块
+ */
 public class WordFragment extends Fragment {
 
     public static TextView text_word_foundation;

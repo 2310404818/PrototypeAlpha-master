@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="datalist">
+        <item>建设单位负责人</item>
+        <item>施工单位负责人</item>
+        <item>建立单位负责人</item>
+        <item>执法人员甲</item>
+        <item>执法人员乙</item>
+    </string-array>
+
+</resources>

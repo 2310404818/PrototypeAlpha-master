@@ -18,6 +18,9 @@ import com.swj.prototypealpha.swj.util.RecyclerViewHelper.ItemAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 项目信息类
+ */
 public class ProjectInfoActivity extends AppCompatActivity implements OnItemClickListener
 {
 
@@ -65,13 +68,14 @@ public class ProjectInfoActivity extends AppCompatActivity implements OnItemClic
         Bitmap schedule= BitmapFactory.decodeResource(getResources(),R.mipmap.schedule);
         Bitmap checknote= BitmapFactory.decodeResource(getResources(),R.mipmap.check_note);
         Bitmap rightArrow = BitmapFactory.decodeResource(getResources(),R.mipmap.right_arrow);
-        ItemBean item0 = new ItemBean("项目名称","橘子洲大桥提质改造工程",proj_name,rightArrow);
-        ItemBean item1 = new ItemBean("项目地址","岳麓区",proj_addr,rightArrow);
-        ItemBean item3 = new ItemBean("开工时间","2018.09",startingtime,rightArrow);
-        ItemBean item2 = new ItemBean("建设单位","长沙市工务局",builder,rightArrow);
-        ItemBean item6 = new ItemBean("施工单位","湖南省绿林市政景观工程有限公司",builder,rightArrow);
-        ItemBean item4 = new ItemBean("监理单位","城规监理",builder,rightArrow);
-        ItemBean item5 = new ItemBean("当前进度","已完成20个站点土建工程，7个站点钢结构施工",schedule,rightArrow);
+        Bitmap white  = BitmapFactory.decodeResource(getResources(),R.drawable.border);
+        ItemBean item0 = new ItemBean("项目名称","橘子洲大桥提质改造工程",proj_name,white );
+        ItemBean item1 = new ItemBean("项目地址","岳麓区",proj_addr,white );
+        ItemBean item3 = new ItemBean("开工时间","2018.09",startingtime,white );
+        ItemBean item2 = new ItemBean("建设单位","长沙市工务局",builder,white );
+        ItemBean item6 = new ItemBean("施工单位","湖南省绿林市政景观工程有限公司",builder,white );
+        ItemBean item4 = new ItemBean("监理单位","城规监理",builder,white );
+        ItemBean item5 = new ItemBean("当前进度","已完成20个站点土建工程，7个站点钢结构施工",schedule,white );
         ItemBean item7 = new ItemBean("检查记录","2月18日，执法服务",checknote,rightArrow);
 
         itemList.add(item0);
@@ -96,8 +100,13 @@ public class ProjectInfoActivity extends AppCompatActivity implements OnItemClic
 
     @Override
     public void onItemClick(int position) {
-        Intent intent = new Intent(ProjectInfoActivity.this,HistoryAccordActivity.class);
-        startActivity(intent);
+        switch (position){
+            case 7:
+                Intent intent = new Intent(ProjectInfoActivity.this,HistoryAccordActivity.class);
+                startActivity(intent);
+                break;
+        }
+
     }
 
     @Override

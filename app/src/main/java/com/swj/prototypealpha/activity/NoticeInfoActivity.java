@@ -3,14 +3,16 @@ package com.swj.prototypealpha.activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.method.ScrollingMovementMethod;
+import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.swj.prototypealpha.Enity.NoticeEntity;
 import com.swj.prototypealpha.R;
 
 public class NoticeInfoActivity extends AppCompatActivity {
-
+    private Toolbar toolbar_info_notice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,9 +37,26 @@ public class NoticeInfoActivity extends AppCompatActivity {
             sender.setMovementMethod(ScrollingMovementMethod.getInstance());
             fromer.setMovementMethod(ScrollingMovementMethod.getInstance());
             content.setMovementMethod(ScrollingMovementMethod.getInstance());
-
+            initUI();
         }
+    }
+    private void initUI()
+    {
+        toolbar_info_notice = findViewById(R.id.toolbar_info_notice);
+        setSupportActionBar(toolbar_info_notice);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        if(item.getItemId() == android.R.id.home)
+        {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
