@@ -1,7 +1,11 @@
 package com.swj.prototypealpha.swj;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.media.MediaRecorder;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -10,17 +14,27 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.swj.prototypealpha.R;
+import com.swj.prototypealpha.oyjz.ShowRecordActivity;
 
-/**
- * 发起检查
- * 笔录模块
- */
+import java.io.File;
+import java.io.IOException;
+
+import kr.co.namee.permissiongen.PermissionGen;
+
+
 public class WordFragment extends Fragment {
+
+    private Button btn_control;
+    private Button btn_record;
+    private boolean isStart = false;
+    private MediaRecorder mr = null;
 
     public static TextView text_word_foundation;
 
@@ -138,7 +152,7 @@ public class WordFragment extends Fragment {
 
                 }
             }
-            });
+        });
 
 
     }
@@ -148,6 +162,80 @@ public class WordFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         initUI();
         setOnClickListener();
+
+        request();
+        btn_record = (Button) getView().findViewById(R.id.btn_record);
+        btn_record.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), ShowRecordActivity.class);
+                startActivity(intent);
+            }
+        });
+        btn_control = (Button) getView().findViewById(R.id.btn_control);
+        btn_control.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!isStart){
+                    startRecord();
+                    btn_control.setText("停止录制");
+                    isStart = true;
+                }else{
+                    stopRecord();
+                    btn_control.setText("开始录制");
+                    isStart = false;
+                }
+            }
+        });
+    }
+    File dir = new File(Environment.getExternalStorageDirectory(),"sounds");
+    //开始录制
+    private void startRecord(){
+        if(mr == null){
+            if(!dir.exists()){
+                dir.mkdirs();
+            }
+            File soundFile = new File(dir,System.currentTimeMillis()+".amr");
+            if(!soundFile.exists()){
+                try {
+                    soundFile.createNewFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+            mr = new MediaRecorder();
+            mr.setAudioSource(MediaRecorder.AudioSource.MIC);  //音频输入源
+            mr.setOutputFormat(MediaRecorder.OutputFormat.AMR_WB);   //设置输出格式
+            mr.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_WB);   //设置编码格式
+            mr.setOutputFile(soundFile.getAbsolutePath());
+            try {
+                mr.prepare();
+                mr.start();  //开始录制
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+
+    //停止录制，资源释放
+    private void stopRecord(){
+        if(mr != null){
+            mr.stop();
+            mr.release();
+            mr = null;
+        }
+    }
+
+    private void request() {
+        PermissionGen.with(this)
+                .addRequestCode(100)
+                .permissions(Manifest.permission.RECORD_AUDIO
+                        , Manifest.permission.WRITE_EXTERNAL_STORAGE
+                        , Manifest.permission.WAKE_LOCK
+                        , Manifest.permission.READ_EXTERNAL_STORAGE)
+                .request();
     }
 
     @Override

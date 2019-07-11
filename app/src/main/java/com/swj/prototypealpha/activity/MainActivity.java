@@ -11,9 +11,6 @@ import android.widget.TextView;
 
 import com.swj.prototypealpha.R;
 
-/**
- * 主页面
- */
 public class MainActivity extends AppCompatActivity
 {
     TextView tv_title;

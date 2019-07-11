@@ -26,8 +26,9 @@
         tools:ignore="ProtectedPermissions" />
     <!-- 允许程序发送短信 -->
     <uses-permission android:name="android.permission.SEND_SMS" />
-
-
+    <!-- 往内存寫入和錄音權限 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <application
         android:name=".MyApplication"
@@ -132,6 +133,13 @@
             android:name=".activity.ChoosePerson"
             android:label="@string/title_activity_choose_person"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".oyjz.PersonalinfoActivity"
+            android:label="@string/title_activity_personalinfo"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".oyjz.RegisterActivity" />
+        <activity android:name=".oyjz.ResetPasswordActivity" />
+        <activity android:name=".oyjz.ShowRecordActivity"></activity>
     </application>
 
 </manifest>

@@ -158,4 +158,5 @@
 \n\u3000\u3000第八十二条本法自2002年10月1日起施行。</string>
     <string name="title_activity_choose_check_person">ChooseCheckPerson</string>
     <string name="title_activity_choose_person">ChoosePerson</string>
+    <string name="title_activity_personalinfo">PersonalinfoActivity</string>
 </resources>

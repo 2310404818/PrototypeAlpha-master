@@ -66,4 +66,6 @@ dependencies {
     implementation 'com.carson_ho:SearchLayout:1.0.1'
     //搜索功能
     implementation files('libs/pinyin4j-2.5.0.jar')
+    //動態獲取權限
+    implementation 'com.lovedise:permissiongen:0.0.6'
 }
