@@ -26,6 +26,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.swj.prototypealpha.R;
+import com.swj.prototypealpha.activity.MainActivity;
 import com.swj.prototypealpha.swj.util.ItemBean;
 import com.swj.prototypealpha.swj.util.OnItemClickListener;
 import com.swj.prototypealpha.swj.util.RecyclerViewHelper.ItemAdapter;
@@ -182,7 +183,9 @@ public class LaunchActivity extends AppCompatActivity
     {
         if(item.getItemId() == android.R.id.home)
         {
-            finish();
+            Intent intent =new Intent(LaunchActivity.this,MainActivity.class);
+            startActivity(intent);
+            this.finish();
             return true;
         }
         return super.onOptionsItemSelected(item);

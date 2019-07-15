@@ -18,16 +18,19 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.swj.prototypealpha.R;
 import com.swj.prototypealpha.oyjz.ShowRecordActivity;
-
 import java.io.File;
 import java.io.IOException;
-
 import kr.co.namee.permissiongen.PermissionGen;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
+/**
+ * 笔录界面
+ * 文字笔录
+ * 录音笔录
+ */
 
 public class WordFragment extends Fragment {
 
@@ -35,23 +38,14 @@ public class WordFragment extends Fragment {
     private Button btn_record;
     private boolean isStart = false;
     private MediaRecorder mr = null;
-
     public static TextView text_word_foundation;
-
     public static TextView text_word_record;
-
     public static String word_foundation;
-
     public static String word_question;
-
     EditText edit_word_foundation;
-
     EditText edit_word_question;
-
     FloatingActionButton  fab_foundation_submit;
-
     FloatingActionButton fab_record_submit;
-
     LinearLayout linearLayout;
 
     @SuppressLint("RestrictedApi")
@@ -195,7 +189,10 @@ public class WordFragment extends Fragment {
             if(!dir.exists()){
                 dir.mkdirs();
             }
-            File soundFile = new File(dir,System.currentTimeMillis()+".amr");
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy年MM月dd日  HH:mm:ss");
+            Date curDate = new Date(System.currentTimeMillis());
+            String str = formatter.format(curDate);
+            File soundFile = new File(dir,str+".amr");
             if(!soundFile.exists()){
                 try {
                     soundFile.createNewFile();

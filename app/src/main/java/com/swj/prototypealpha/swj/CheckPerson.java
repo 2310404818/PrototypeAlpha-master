@@ -170,7 +170,9 @@ public class CheckPerson extends AppCompatActivity implements OnItemClickListene
     {
         if(item.getItemId() == android.R.id.home)
         {
-            finish();
+            Intent intent = new Intent(CheckPerson.this,LaunchActivity.class);
+            startActivity(intent);
+            this.finish();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -180,7 +182,7 @@ public class CheckPerson extends AppCompatActivity implements OnItemClickListene
         super.onActivityResult(requestCode,resultCode,data);
         if (requestCode==222&&resultCode==111){
             String name =data.getStringExtra("name");
-            Log.d(name,"大大实打实大苏打");
+       //     Log.d(name,"大大实打实大苏打");
             Bitmap addPerson = BitmapFactory.decodeResource(getResources(),R.mipmap.check_add);
             Bitmap startingtime = BitmapFactory.decodeResource(getResources(),R.mipmap.startingtime);
             itemList.remove(item4);

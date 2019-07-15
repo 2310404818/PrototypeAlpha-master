@@ -55,8 +55,18 @@ public class LookupFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_lookup, container, false);
     }
     public void initData(){
-     //   Log.d(String.valueOf(ChooseCheckPerson.flag),"重大降低哦按实际地啊降低哦阿三降低哦啊");
-        if (ChooseCheckPerson.flag==1)
+        Log.d(String.valueOf(ChooseCheckPerson.flag),"重大降低哦按实际地啊降低哦阿三降低哦啊");
+        if (ChooseCheckPerson.flag!=0){
+            nameList.clear();
+            signList.clear();
+            for (int i=0;i<ChooseCheckPerson.flag;i++)
+            {
+                nameList.add(ChooseCheckPerson.name[i]);
+                signList.add(ChooseCheckPerson.picture[i]);
+            }
+            signadapter.notifyDataSetChanged();
+        }
+/*        if (ChooseCheckPerson.flag==1)
         {
         //    Log.d("和大伙都","你打好嗲花大沙嗲收到货");
             nameList.clear();
@@ -73,7 +83,7 @@ public class LookupFragment extends Fragment {
             signList.add(ChooseCheckPerson.picture[4]);
             signadapter.notifyDataSetChanged();
         }
-
+*/
     }
 
     @Override

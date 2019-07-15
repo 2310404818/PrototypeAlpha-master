@@ -114,7 +114,8 @@ public class ChooseCheckPerson extends AppCompatActivity implements View.OnClick
                 Intent intent =new Intent();
                 ChooseCheckPerson.this.setResult(110,intent);
 
-                flag=1;
+                flag=nameList.size();
+      //          Log.d(String.valueOf(flag),"的驕傲就打算幾點破案售價跌破安神定魄按實際的");
                 finish();
             }
         });
