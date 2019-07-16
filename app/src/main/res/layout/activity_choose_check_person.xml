@@ -22,6 +22,15 @@
             android:text="签名"
             android:textColor="@color/color_white"
             android:textSize="24sp" />
+        <TextView
+            android:id="@+id/tx_complete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:text="完成"
+            android:textColor="@color/color_white"
+            android:textSize="24sp"
+            />
 
     </android.support.v7.widget.Toolbar>
 
@@ -44,14 +53,14 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_margin="10dp"
+        android:layout_marginEnd="0dp"
         android:layout_weight="1">
-
 
         <com.swj.prototypealpha.swj.util.searchView.SignatureView
             android:id="@+id/sv_sign_view"
-            android:layout_gravity="center"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:layout_gravity="center" />
 
         <TextView
             android:id="@+id/tv_sign_tip"
@@ -61,37 +70,29 @@
             android:gravity="center"
             android:text="请在此区域手写签名！" />
 
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/my_fab"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_margin="16dp"
-            app:srcCompat="@mipmap/ok"
-            android:clickable="true"
-            app:elevation="8dp" />
+            >
 
+            <Button
+                android:id="@+id/btn_clear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/color_white"
+                android:text="清除" />
+
+            <Button
+                android:layout_marginLeft="-10px"
+                android:id="@+id/btn_sure"
+                android:background="@color/color_white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="确定" />
+
+        </LinearLayout>
     </FrameLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <Button
-            android:id="@+id/btn_clear"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="清除" />
-
-        <Button
-            android:id="@+id/btn_sure"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="确定" />
-    </LinearLayout>
 
 </LinearLayout>

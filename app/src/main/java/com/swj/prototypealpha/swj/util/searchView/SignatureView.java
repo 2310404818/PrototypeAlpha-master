@@ -16,19 +16,19 @@ import android.view.View;
 /**
  * 更加平滑的手写板
  * @author wtt
- * @date 2017/06/27
+ * @date
  */
 public class SignatureView extends View {
     private static final float STROKE_WIDTH = 10f;
 
-    /** Need to track this so the dirty region can accommodate the stroke. **/
+    /** 需要跟踪这一点，以便脏区可以容纳中风。 **/
     private static final float HALF_STROKE_WIDTH = STROKE_WIDTH / 2;
 
     private Paint paint = new Paint();
     private Path path = new Path();
 
     /**
-     * Optimizes painting by invalidating the smallest possible area.
+     *通过使尽可能小的区域无效来优化绘制。
      */
     private float lastTouchX;
     private float lastTouchY;
@@ -61,7 +61,7 @@ public class SignatureView extends View {
     }
 
     /**
-     * Erases the signature.
+     * 删除签名。
      */
     public void clear() {
         if (cacheCanvas != null) {
@@ -136,8 +136,8 @@ public class SignatureView extends View {
     }
 
     /**
-     * Called when replaying history to ensure the dirty region includes all
-     * points.
+     * 在重播历史记录时调用，以确保脏区域包含所有点
+     *
      */
     private void expandDirtyRect(float historicalX, float historicalY) {
         if (historicalX < dirtyRect.left) {
@@ -153,7 +153,7 @@ public class SignatureView extends View {
     }
 
     /**
-     * Resets the dirty region when the motion event occurs.
+     *
      * 运动发生时重置脏地区
      */
     private void resetDirtyRect(float eventX, float eventY) {

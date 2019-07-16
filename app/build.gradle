@@ -3,6 +3,9 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 28
     defaultConfig {
+        packagingOptions {
+            exclude 'META-INF/proguard/androidx-annotations.pro'
+        }
         applicationId "com.swj.prototypealpha"
         minSdkVersion 24
         targetSdkVersion 28
@@ -68,4 +71,7 @@ dependencies {
     implementation files('libs/pinyin4j-2.5.0.jar')
     //動態獲取權限
     implementation 'com.lovedise:permissiongen:0.0.6'
+    implementation project(path: ':volley-master')
+    //gson配置
+    implementation 'com.google.code.gson:gson:2.8.5'
 }

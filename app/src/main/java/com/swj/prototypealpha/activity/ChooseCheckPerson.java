@@ -27,6 +27,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
@@ -55,7 +56,7 @@ public class ChooseCheckPerson extends AppCompatActivity implements View.OnClick
 
     private SignatureView mSignView;
     private Spinner sp_name;
-    private FloatingActionButton my_fab;
+    TextView tx_complete;
     RecyclerView recv_photo;
     android.support.v7.widget.Toolbar tlb_mycheck;
     public static int flag=0;
@@ -88,6 +89,16 @@ public class ChooseCheckPerson extends AppCompatActivity implements View.OnClick
         myname =new ChargePerson(string);
         name[number] = myname;
 
+        tx_complete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+             Log.d(String.valueOf(flag),"dddddddddddddddddddddddddddddddddddddddddddddddddddddddd");
+                Intent intent =new Intent();
+                ChooseCheckPerson.this.setResult(110,intent);
+                flag=nameList.size();
+                ChooseCheckPerson.this.finish();
+            }
+        });
         //spinner选择
         sp_name.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -97,28 +108,19 @@ public class ChooseCheckPerson extends AppCompatActivity implements View.OnClick
                     myname= new ChargePerson(str);
                     name[number] = myname;
              //       Log.d(String.valueOf(myname),"好几代皇帝哦啊实打实降低哦案件哦");
-             //       Log.d(str,"基地啊设计大奖偶爱睡大觉降低哦按实际");
+                    Log.d(str,"基地啊设计大奖偶爱睡大觉降低哦按实际");
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                String string = "建设单位负责人";
-                myname =new ChargePerson(string);
+
+                String str = "建设单位负责人";
+                myname= new ChargePerson(str);
                 name[number] = myname;
            //     Log.d(string,"呼唤大顶哈顶哈圣诞节安静的环境卡是大家");
             }
         });
-        my_fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent =new Intent();
-                ChooseCheckPerson.this.setResult(110,intent);
 
-                flag=nameList.size();
-      //          Log.d(String.valueOf(flag),"的驕傲就打算幾點破案售價跌破安神定魄按實際的");
-                finish();
-            }
-        });
 
     }
 
@@ -129,11 +131,11 @@ public class ChooseCheckPerson extends AppCompatActivity implements View.OnClick
      *
      */
     private void initView() {
-
+        tx_complete =findViewById(R.id.tx_complete);
         mSignView = findViewById(R.id.sv_sign_view);
         sp_name = findViewById(R.id.sp_name);
         recv_photo=findViewById(R.id.recv_lookup_picture);
-        my_fab = findViewById(R.id.my_fab);
+        tx_complete.setClickable(true);
 
         recv_photo.setLayoutManager(new GridLayoutManager(this,3));
         signadapter= new SignAdapter(signList,nameList);
@@ -228,7 +230,6 @@ public class ChooseCheckPerson extends AppCompatActivity implements View.OnClick
             case R.id.btn_clear:
                 clearClick();
                 break;
-
             case R.id.btn_sure:
                 sureClick();
                 break;
