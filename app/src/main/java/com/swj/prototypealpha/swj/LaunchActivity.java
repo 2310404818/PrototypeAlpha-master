@@ -4,11 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Parcelable;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -25,19 +22,28 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
 import com.swj.prototypealpha.R;
 import com.swj.prototypealpha.activity.MainActivity;
 import com.swj.prototypealpha.swj.util.ItemBean;
-import com.swj.prototypealpha.swj.util.OnItemClickListener;
-import com.swj.prototypealpha.swj.util.RecyclerViewHelper.ItemAdapter;
-import com.swj.prototypealpha.swj.util.searchView.PinyinUtils;
-import com.swj.prototypealpha.swj.util.searchView.SortModel;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 项目列表，搜索项目
+ * 移动检查后续界面
+ * 项目列表
+ * 搜索项目
  */
 public class LaunchActivity extends AppCompatActivity
 {
@@ -45,10 +51,11 @@ public class LaunchActivity extends AppCompatActivity
 
     private ListView recvv_launch;
 
-    private ItemAdapter adapter;
+   // private ItemAdapter adapter;
     private MyItemAdapter mAdapter;
     private List<ItemBean> itemList = new ArrayList<>();
     private List<ItemBean> old_Data = new ArrayList<>();
+    private static String TAG = LaunchActivity.class.getSimpleName();
     /**
      * 搜索view
      */
@@ -68,7 +75,8 @@ public class LaunchActivity extends AppCompatActivity
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ItemBean itemBean = old_Data.get(position);
                 Intent intent = new Intent(LaunchActivity.this,CheckPerson.class);
-                intent.putExtra("titile", itemBean.getTitle());
+                intent.putExtra("title", itemBean.getTitle());
+                intent.putExtra("address",itemBean.getContent());
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }
@@ -125,10 +133,13 @@ public class LaunchActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_launch);
+
+        initUI();
+     //   itemList = myJsonArray();
         itemList=Update();
         old_Data = itemList;
         mAdapter = new MyItemAdapter();
-        initUI();
+
         recvv_launch.setAdapter(mAdapter);
         initViews();
 
@@ -138,7 +149,7 @@ public class LaunchActivity extends AppCompatActivity
     {
         ArrayList<ItemBean> myData =new ArrayList<>();
         itemList.clear();
-        Bitmap leftImage = BitmapFactory.decodeResource(getResources(),R.mipmap.check);
+        Bitmap leftImage = BitmapFactory.decodeResource(getResources(),R.mipmap.project_item);
         Bitmap rightArrow = BitmapFactory.decodeResource(getResources(),R.mipmap.add);
 
         ItemBean item0 = new ItemBean("万家丽路BRT中途停靠站建设项目","万家丽路",leftImage,rightArrow);
@@ -183,14 +194,61 @@ public class LaunchActivity extends AppCompatActivity
     {
         if(item.getItemId() == android.R.id.home)
         {
-            Intent intent =new Intent(LaunchActivity.this,MainActivity.class);
+            Intent intent = new Intent(LaunchActivity.this,MainActivity.class);
             startActivity(intent);
-            this.finish();
+            LaunchActivity.this.finish();
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
+    /**
+     * 服务器拉取数据
+     */
+    public List<ItemBean> myJsonArray(){
+        final ArrayList<ItemBean> myData =new ArrayList<>();
+        itemList.clear();
 
+        RequestQueue requestQueue =Volley.newRequestQueue(this);
+        String url = "http://257v7842r5.wicp.vip/mobile_inspection_war/Project";
+        JsonArrayRequest jsonArrayRequest =new JsonArrayRequest(Request.Method.POST,url, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+            //    Log.d("已经调用了", "没错就是这样，你爸爸还是你爸爸");
+                try {
+
+                    for (int i = 0; i < response.length(); i++) {
+                        JSONObject Project = (JSONObject) response.get(i);
+
+                        Bitmap leftImage = BitmapFactory.decodeResource(getResources(),R.mipmap.project_item);
+                        Bitmap rightArrow = BitmapFactory.decodeResource(getResources(),R.mipmap.add);
+                        String name = Project.getString("ProjectName");
+                        String address = Project.getString("Address");
+                  //      Log.d(name+"    "+address,"这是名称");
+
+                        ItemBean itemBean =new ItemBean(name,address,leftImage,rightArrow);
+                        myData.add(itemBean);
+
+                    }
+                    old_Data = itemList;
+                    mAdapter = new MyItemAdapter();
+                    recvv_launch.setAdapter(mAdapter);
+                    mAdapter.notifyDataSetChanged();
+                  //  Log.d("你爸爸","你爸爸");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(TAG,"Error: "+error.getMessage());
+             //   Toast.makeText(getApplicationContext(),"很嗲回答是大号",Toast.LENGTH_SHORT).show();
+            }
+        });
+        requestQueue.add(jsonArrayRequest);
+        return myData;
+    }
     /**
      * 带模糊搜索的适配器
      */
@@ -221,6 +279,8 @@ public class LaunchActivity extends AppCompatActivity
             item_left_image.setImageBitmap(itemBean. getLeft_image());
             ImageView item_right_arrow = view.findViewById(R.id.item_right_arrow);
             item_right_arrow.setImageBitmap(itemBean.getRight_image());
+            TextView item_content =view.findViewById(R.id.item_content);
+            item_content.setText(itemBean.getContent());
             return view;
         }
 

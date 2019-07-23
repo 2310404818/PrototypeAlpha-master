@@ -4,7 +4,7 @@ import android.graphics.Bitmap;
 
 /**
  * 对应item_view的实体类
- * title、content、左边图片、右边图片
+ * 工程名称、地址、左边图片、右边图片
  */
 public class ItemBean {
     public String title;

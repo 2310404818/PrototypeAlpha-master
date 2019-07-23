@@ -12,6 +12,9 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 汉字转拼音工具类
+ */
 public class PinyinUtils {
     /**
      * 获取拼音

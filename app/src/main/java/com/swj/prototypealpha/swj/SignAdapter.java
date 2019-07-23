@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,8 +16,11 @@ import com.swj.prototypealpha.R;
 
 import java.util.List;
 
-import static com.swj.prototypealpha.R.id.tx_sign;
-
+/**
+ * 手写签名界面
+ * 相关适配器
+ * 照片和负责人名称
+ */
 public class SignAdapter extends RecyclerView.Adapter<SignAdapter.ViewHolder> {
 
   //  String TAG = "SignAdapter";

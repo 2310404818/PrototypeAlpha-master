@@ -1,17 +1,21 @@
 package com.swj.prototypealpha.swj;
 
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.swj.prototypealpha.R;
 
-
+/**
+ * 发起检查界面
+ * 为项目信息、照片、笔录、审阅fragment提供activity挂靠
+ */
 public class StartActivity extends AppCompatActivity {
     TextView tv_title;
 
@@ -20,15 +24,29 @@ public class StartActivity extends AppCompatActivity {
     private Fragment pictFragment;
     private Fragment lookupFragment;
     private Fragment wordFragment;
-
+    private android.support.v7.widget.Toolbar toolbar;
     private Fragment[] fragments;
-
+    private String ProjectName,address;
     private int lastFrament;
+
+
+    public void setToolBar()
+    {
+        toolbar = findViewById(R.id.toolbar_start);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+    }
 
     private void initUI()
     {
         tv_title = findViewById(R.id.mainTitle_start);
+        Bundle bundle = new Bundle();
+        bundle.putString("ProjectName",ProjectName);
+        bundle.putString("Address",address);
         proFragment = new ProjFragment();
+        proFragment.setArguments(bundle);
         pictFragment = new PictureFragment();
         lookupFragment = new LookupFragment();
         wordFragment = new WordFragment();
@@ -90,7 +108,10 @@ public class StartActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
-
+        setToolBar();
+        Intent intent =getIntent();
+        ProjectName = intent.getStringExtra("title");
+        address =intent.getStringExtra("address");
         initUI();
     }
 

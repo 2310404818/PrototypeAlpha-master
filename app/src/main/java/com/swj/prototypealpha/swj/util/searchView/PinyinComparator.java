@@ -2,6 +2,9 @@ package com.swj.prototypealpha.swj.util.searchView;
 
 import java.util.Comparator;
 
+/**
+ * 汉字换拼音工具类
+ */
 public class PinyinComparator implements Comparator<SortModel> {
 
     public int compare(SortModel o1, SortModel o2) {

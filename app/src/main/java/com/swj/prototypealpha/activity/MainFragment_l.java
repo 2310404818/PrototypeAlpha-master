@@ -10,10 +10,16 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 import com.swj.prototypealpha.R;
-import com.swj.prototypealpha.swj.ImageAdapter;
 import com.swj.prototypealpha.swj.LaunchActivity;
 import com.swj.prototypealpha.swj.ProjectListActivity;
 
+/**
+ * 首页界面
+ * 项目信息
+ * 移动执法
+ * 政策法规
+ * 近期通知
+ */
 public class MainFragment_l extends Fragment {
 
     ImageButton projectList;

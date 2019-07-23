@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
+ * 检查人列表
  * 波浪侧边栏
  */
 public class WaveSideBar extends View {

@@ -1,5 +1,8 @@
 package com.swj.prototypealpha.swj.util.searchView;
 
+/**
+ * 添加检查人列表对应的实体类
+ */
 public class SortModel {
 
     private String name;

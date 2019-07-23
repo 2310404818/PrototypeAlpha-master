@@ -11,10 +11,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.swj.prototypealpha.R;
-import com.swj.prototypealpha.swj.CheckPerson;
 
 import java.util.List;
 
+/**
+ * 添加检查人列表对应的适配器
+ */
 public class SortAdapter extends RecyclerView.Adapter<SortAdapter.ViewHolder> {
     private LayoutInflater mInflater;
     private List<SortModel> mData;
@@ -53,13 +55,13 @@ public class SortAdapter extends RecyclerView.Adapter<SortAdapter.ViewHolder> {
             public void onClick(View view) {
 
                 if (Activity.class.isInstance(mContext)){
+
                     Activity activity = (Activity) mContext;
                     Intent intent =new Intent();
-             //      intent.setClass(mContext,CheckPerson.class);
-               //     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    Toast.makeText(activity,"添加申请已发送",Toast.LENGTH_SHORT).show();
                     intent.putExtra("name",mData.get(position).getName());
                     activity.setResult(111,intent);
-              //      mContext.startActivity(intent);
+
                     activity.finish();
                 }
             }

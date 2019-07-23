@@ -25,6 +25,10 @@ import com.swj.prototypealpha.R;
 
 import java.util.ArrayList;
 
+/**
+ * 政策法规列表
+ * 提供模糊搜索
+ */
 public class PolicyLableActivity extends AppCompatActivity {
     private Toolbar             mToolbar;
     private ListView            mListlView;

@@ -9,6 +9,10 @@ import com.swj.prototypealpha.R;
 import java.util.Timer;
 import java.util.TimerTask;
 
+/**
+ * 欢迎界面
+ * 规定时间自动跳转主页面
+ */
 public class WelcomeActivity extends AppCompatActivity {
 
     @Override

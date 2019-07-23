@@ -11,6 +11,10 @@ import android.widget.TextView;
 
 import com.swj.prototypealpha.R;
 
+/**
+ * 个人中心界面
+ * 查看个人信息行的自定义控件
+ */
 public class PersonalItemView extends RelativeLayout {
     private TextView data;
 

@@ -7,6 +7,10 @@ import android.view.MenuItem;
 
 import com.swj.prototypealpha.R;
 
+/**
+ * 具体政策法规界面
+ *
+ */
 public class PolicyinfoActivity extends AppCompatActivity {
     private Toolbar toolbarPolicyinfo;
     @Override

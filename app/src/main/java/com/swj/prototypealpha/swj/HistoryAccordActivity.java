@@ -1,16 +1,14 @@
 package com.swj.prototypealpha.swj;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 
 import com.swj.prototypealpha.R;
 import com.swj.prototypealpha.swj.util.ItemBean;
@@ -32,13 +30,13 @@ public class HistoryAccordActivity extends AppCompatActivity implements View.OnC
 
     private List<ItemBean> itemList = new ArrayList<>();
 
-    Button btn_hitory;
+
 
     private void InitUI()
     {
         tlb_history = findViewById(R.id.tlb_history);
         recv_hitory = findViewById(R.id.recv_history);
-        btn_hitory = findViewById(R.id.btn_history);
+
 
         setSupportActionBar(tlb_history);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -58,7 +56,8 @@ public class HistoryAccordActivity extends AppCompatActivity implements View.OnC
 
         adapter = new ItemAdapter(itemList);
         recv_hitory.setAdapter(adapter);
-        btn_hitory.setOnClickListener(this);
+
+
         Update();
     }
 
@@ -95,8 +94,7 @@ public class HistoryAccordActivity extends AppCompatActivity implements View.OnC
 
     @Override
     public void onClick(View v) {
-        Intent intent = new Intent(HistoryAccordActivity.this,CheckPerson.class);
-        startActivity(intent);
+        this.finish();
     }
 
     @Override
@@ -104,7 +102,7 @@ public class HistoryAccordActivity extends AppCompatActivity implements View.OnC
     {
         if(item.getItemId() == android.R.id.home)
         {
-            finish();
+            this.finish();
             return true;
         }
         return super.onOptionsItemSelected(item);

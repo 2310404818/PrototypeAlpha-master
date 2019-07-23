@@ -7,7 +7,6 @@ import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.text.InputType;
 import android.view.Gravity;
@@ -18,13 +17,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.swj.prototypealpha.R;
 import com.swj.prototypealpha.oyjz.ShowRecordActivity;
+
 import java.io.File;
 import java.io.IOException;
-import kr.co.namee.permissiongen.PermissionGen;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import kr.co.namee.permissiongen.PermissionGen;
 
 /**
  * 笔录界面
@@ -44,8 +46,7 @@ public class WordFragment extends Fragment {
     public static String word_question;
     EditText edit_word_foundation;
     EditText edit_word_question;
-    FloatingActionButton  fab_foundation_submit;
-    FloatingActionButton fab_record_submit;
+
     LinearLayout linearLayout;
 
     @SuppressLint("RestrictedApi")
@@ -74,88 +75,18 @@ public class WordFragment extends Fragment {
         //水平滚动设置为False
         edit_word_question.setHorizontallyScrolling(false);
 
-        fab_record_submit = getActivity().findViewById(R.id.flb_word_question_record_submit);
 
-        fab_foundation_submit = getActivity().findViewById(R.id.flb_word_foundation_submit);
 
 
     }
 
-    private void setOnClickListener()
-    {
-        fab_foundation_submit.setOnClickListener(new View.OnClickListener() {
-            @SuppressLint("RestrictedApi")
-            @Override
-            public void onClick(View v) {
-                String foundation = edit_word_foundation.getText().toString()+'\n';
-                String old_foundation = text_word_foundation.getText().toString();
 
-                word_foundation = foundation;
-
-                text_word_foundation.setText(old_foundation+foundation);
-                linearLayout.setFocusableInTouchMode(true);
-                edit_word_foundation.clearFocus();
-                fab_foundation_submit.setVisibility(View.GONE);
-                fab_record_submit.setVisibility(View.GONE);
-
-            }
-        });
-        fab_record_submit.setOnClickListener(new View.OnClickListener() {
-            @SuppressLint("RestrictedApi")
-            @Override
-            public void onClick(View v) {
-                String record = edit_word_question.getText().toString()+'\n';
-                String old_rocord = text_word_record.getText().toString();
-                text_word_record.setText(old_rocord+record);
-
-                word_question = record;
-
-                linearLayout.setFocusableInTouchMode(true);
-                edit_word_question.clearFocus();
-                fab_record_submit.setVisibility(View.GONE);
-                fab_foundation_submit.setVisibility(View.GONE);
-            }
-        });
-
-        edit_word_foundation.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @SuppressLint("RestrictedApi")
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if(hasFocus)
-                {
-                    fab_foundation_submit.setVisibility(View.VISIBLE);
-
-                }
-                else {
-                    fab_foundation_submit.setVisibility(View.GONE);
-
-                }
-            }
-        });
-
-        edit_word_question.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @SuppressLint("RestrictedApi")
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    fab_record_submit.setVisibility(View.VISIBLE);
-
-                } else {
-                    fab_record_submit.setVisibility(View.GONE);
-
-
-                }
-            }
-        });
-
-
-    }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initUI();
-        setOnClickListener();
+
 
         request();
         btn_record = (Button) getView().findViewById(R.id.btn_record);

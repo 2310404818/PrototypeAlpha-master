@@ -6,7 +6,6 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
@@ -14,9 +13,16 @@ import android.widget.TextView;
 import com.swj.prototypealpha.Enity.NoticeEntity;
 import com.swj.prototypealpha.R;
 import com.swj.prototypealpha.activity.NoticeInfoActivity;
+
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 近期通知的列表适配器
+ * 对应noticeentity实体类
+ * 对应item_notice自定义控件
+ *
+ */
 public class NoticeAdapter extends RecyclerView.Adapter<NoticeAdapter.ViewHolder> implements Filterable {
 
     private List<NoticeEntity> mnotice ;

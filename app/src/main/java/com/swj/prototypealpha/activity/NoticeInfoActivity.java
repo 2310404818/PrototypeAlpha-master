@@ -11,6 +11,10 @@ import android.widget.TextView;
 import com.swj.prototypealpha.Enity.NoticeEntity;
 import com.swj.prototypealpha.R;
 
+/**
+ * 近期通知内
+ * 具体的通知消息界面
+ */
 public class NoticeInfoActivity extends AppCompatActivity {
     private Toolbar toolbar_info_notice;
 

@@ -2,58 +2,45 @@ package com.swj.prototypealpha.swj;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SearchRecentSuggestionsProvider;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.swj.prototypealpha.activity.NoticeListActivity;
-import com.swj.prototypealpha.activity.NoticeResultListActivity;
-
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.BaseViewHolder;
-import com.chad.library.adapter.base.callback.ItemDragAndSwipeCallback;
-import com.chad.library.adapter.base.listener.OnItemDragListener;
-import com.chad.library.adapter.base.listener.OnItemSwipeListener;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
 import com.swj.prototypealpha.R;
 import com.swj.prototypealpha.swj.util.ItemBean;
-import com.swj.prototypealpha.swj.util.OnItemClickListener;
-import com.swj.prototypealpha.swj.util.RecyclerViewHelper.ItemAdapter;
-import com.swj.prototypealpha.swj.util.RecyclerViewHelper.ItemDragAdapter;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
- * 项目信息页面
+ * 项目信息后续界面
  * 动态加载项目信息
  * 实现搜索栏功能
  */
@@ -63,6 +50,9 @@ public class ProjectListActivity extends AppCompatActivity  {
     private MyItemAdapter mAdapter;
     private List<ItemBean> itemList = new ArrayList<>();
     private List<ItemBean> old_Data = new ArrayList<>();
+    private static String TAG = ProjectInfoActivity.class.getSimpleName();
+
+
     /**
      * 搜索view
      */
@@ -82,7 +72,8 @@ public class ProjectListActivity extends AppCompatActivity  {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ItemBean itemBean = old_Data.get(position);
                 Intent intent = new Intent(ProjectListActivity.this,ProjectInfoActivity.class);
-                intent.putExtra("titile", itemBean.getTitle());
+                intent.putExtra("title", itemBean.getTitle());
+                intent.putExtra("address",itemBean.getContent());
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }
@@ -139,20 +130,26 @@ public class ProjectListActivity extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_project_list);
+        initUI();
+        initViews();
+      //  itemList=myJsonArray();
+
         itemList=Update();
         old_Data = itemList;
         mAdapter = new MyItemAdapter();
-        initUI();
         rv_project_list.setAdapter(mAdapter);
-        initViews();
 
     }
 
+    /**
+     * 本地测试数据
+     * @return
+     */
     private List<ItemBean> Update()
     {
         ArrayList<ItemBean> myData =new ArrayList<>();
         itemList.clear();
-        Bitmap leftImage = BitmapFactory.decodeResource(getResources(),R.mipmap.check);
+        Bitmap leftImage = BitmapFactory.decodeResource(getResources(),R.mipmap.project_item);
         Bitmap rightArrow = BitmapFactory.decodeResource(getResources(),R.mipmap.add);
 
         ItemBean item0 = new ItemBean("万家丽路BRT中途停靠站建设项目","万家丽路",leftImage,rightArrow);
@@ -192,6 +189,55 @@ public class ProjectListActivity extends AppCompatActivity  {
         return myData;
     }
 
+    /**
+     * 服务器拉取的数据
+     * @return
+     */
+    public List<ItemBean> myJsonArray(){
+        final ArrayList<ItemBean> myData =new ArrayList<>();
+        itemList.clear();
+
+        RequestQueue requestQueue =Volley.newRequestQueue(this);
+        String url = "http://257v7842r5.wicp.vip/mobile_inspection_war/Project";
+        JsonArrayRequest jsonArrayRequest =new JsonArrayRequest(Request.Method.POST,url, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+             //   Log.d("已经调用了", "没错就是这样，你爸爸还是你爸爸");
+                try {
+
+                    for (int i = 0; i < response.length(); i++) {
+                        JSONObject Project = (JSONObject) response.get(i);
+
+                        Bitmap leftImage = BitmapFactory.decodeResource(getResources(),R.mipmap.project_item);
+                        Bitmap rightArrow = BitmapFactory.decodeResource(getResources(),R.mipmap.add);
+                        String name = Project.getString("ProjectName");
+                        String address = Project.getString("Address");
+                   //     Log.d(name+"    "+address,"这是名称");
+
+                        ItemBean itemBean =new ItemBean(name,address,leftImage,rightArrow);
+                        myData.add(itemBean);
+
+                    }
+                    old_Data = itemList;
+                    mAdapter = new MyItemAdapter();
+                    rv_project_list.setAdapter(mAdapter);
+                    mAdapter.notifyDataSetChanged();
+               //     Log.d("你爸爸","你爸爸");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(TAG,"Error: "+error.getMessage());
+          //      Toast.makeText(getApplicationContext(),"很嗲回答是大号",Toast.LENGTH_SHORT).show();
+            }
+        });
+        requestQueue.add(jsonArrayRequest);
+        return myData;
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
@@ -208,6 +254,7 @@ public class ProjectListActivity extends AppCompatActivity  {
      */
     private class MyItemAdapter extends BaseAdapter implements Filterable {
         private MyFilterLaunch mFilter;
+
         @Override
         public int getCount() {
             return old_Data.size();
@@ -233,6 +280,8 @@ public class ProjectListActivity extends AppCompatActivity  {
             item_left_image.setImageBitmap(itemBean. getLeft_image());
             ImageView item_right_arrow = view.findViewById(R.id.item_right_arrow);
             item_right_arrow.setImageBitmap(itemBean.getRight_image());
+            TextView item_content = view.findViewById(R.id.item_content);
+            item_content.setText(itemBean.getContent());
             return view;
         }
 

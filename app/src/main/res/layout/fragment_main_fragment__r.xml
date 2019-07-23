@@ -12,14 +12,25 @@
 
         <ImageView
             android:id="@+id/right_top"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:background="@mipmap/maintop"
-            app:layout_constraintBottom_toTopOf="@+id/guideline28"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/iv_touxiang"
+            android:layout_width="80dp"
+            android:layout_height="71dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/right_name"
+            app:layout_constraintEnd_toEndOf="@+id/right_top"
+            app:layout_constraintStart_toStartOf="@+id/right_top"
+            app:layout_constraintTop_toTopOf="@+id/right_top" />
+
 
         <com.swj.prototypealpha.oyjz.PersonalItemView
             android:id="@+id/right_name"
@@ -69,6 +80,65 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             app:layout_constraintGuide_percent="0.3" />
+
+        <TextView
+            android:id="@+id/tvr_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="136dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="11dp"
+            android:text="姓名"
+            android:textColor="@color/color_white"
+            android:textSize="17sp"
+            app:layout_constraintBottom_toTopOf="@+id/right_name"
+            app:layout_constraintEnd_toStartOf="@+id/guideline12"
+            app:layout_constraintHorizontal_bias="0.631"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_touxiang"
+            app:layout_constraintVertical_bias="0.916" />
+
+        <ImageView
+            android:layout_width="1dp"
+            android:layout_height="15dp"
+            android:layout_marginStart="8dp"
+
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@color/color_white"
+            app:layout_constraintBottom_toTopOf="@+id/right_name"
+            app:layout_constraintEnd_toStartOf="@+id/tvr_phone"
+            app:layout_constraintStart_toEndOf="@+id/tvr_name"
+            app:layout_constraintTop_toBottomOf="@+id/iv_touxiang" />
+
+        <TextView
+            android:id="@+id/tvr_phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="127dp"
+            android:layout_marginBottom="8dp"
+            android:text="电话"
+            android:textColor="@color/color_white"
+            android:textSize="17sp"
+            app:layout_constraintBottom_toTopOf="@+id/right_name"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.147"
+            app:layout_constraintStart_toStartOf="@+id/guideline12"
+            app:layout_constraintTop_toBottomOf="@+id/iv_touxiang"
+            app:layout_constraintVertical_bias="0.733" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/guideline12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="189dp" />
+
+
     </android.support.constraint.ConstraintLayout>
 
 </FrameLayout>

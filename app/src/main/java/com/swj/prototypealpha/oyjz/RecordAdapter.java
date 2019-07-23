@@ -10,9 +10,12 @@ import android.widget.TextView;
 
 import com.swj.prototypealpha.R;
 
-import java.lang.reflect.Array;
 import java.util.List;
 
+/**
+ * 录音功能实现
+ * 适配器
+ */
 public class RecordAdapter extends ArrayAdapter<Record> {
     private int resourceId;
     public RecordAdapter(Context context, int textViewResourceId, List<Record> objects){

@@ -2,23 +2,15 @@ package com.swj.prototypealpha.activity;
 
 
 import android.Manifest;
-import android.arch.lifecycle.GeneratedAdapter;
-import android.arch.lifecycle.Lifecycle;
-import android.arch.lifecycle.LifecycleOwner;
-import android.arch.lifecycle.MethodCallsLogger;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Path;
+import android.os.Bundle;
 import android.os.Environment;
-import android.os.Parcelable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
@@ -28,15 +20,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.Toolbar;
 
 import com.swj.prototypealpha.R;
 import com.swj.prototypealpha.swj.ChargePerson;
-import com.swj.prototypealpha.swj.LookupFragment;
 import com.swj.prototypealpha.swj.Picture;
 import com.swj.prototypealpha.swj.SignAdapter;
 import com.swj.prototypealpha.swj.util.searchView.SignatureView;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -63,7 +53,7 @@ public class ChooseCheckPerson extends AppCompatActivity implements View.OnClick
     public static ChargePerson[] name = new ChargePerson[6];
     String[] mItems;
     String path;
-    int number=0;
+    int number;
     public  static  Picture[]     picture = new Picture[6];
     public Picture  mypicture;
     public ChargePerson myname;
@@ -80,6 +70,7 @@ public class ChooseCheckPerson extends AppCompatActivity implements View.OnClick
         if (checkSelfPermission( Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},1);
         }
+        number =0;
         flag=0;
         setContentView(R.layout.activity_choose_check_person);
         mItems = getResources().getStringArray(R.array.datalist);
@@ -106,9 +97,6 @@ public class ChooseCheckPerson extends AppCompatActivity implements View.OnClick
 
                     String str = (String) sp_name.getItemAtPosition(position);
                     myname= new ChargePerson(str);
-                    name[number] = myname;
-             //       Log.d(String.valueOf(myname),"好几代皇帝哦啊实打实降低哦案件哦");
-                    Log.d(str,"基地啊设计大奖偶爱睡大觉降低哦按实际");
             }
 
             @Override
@@ -117,7 +105,6 @@ public class ChooseCheckPerson extends AppCompatActivity implements View.OnClick
                 String str = "建设单位负责人";
                 myname= new ChargePerson(str);
                 name[number] = myname;
-           //     Log.d(string,"呼唤大顶哈顶哈圣诞节安静的环境卡是大家");
             }
         });
 
@@ -162,14 +149,16 @@ public class ChooseCheckPerson extends AppCompatActivity implements View.OnClick
      * 保存签名图片并展示
      */
     private void sureClick() {
+
         //  保存签名图片
         Bitmap imageBitmap = mSignView.getCachebBitmap();
 
         path = saveFile(imageBitmap);
         mypicture  = new Picture(BitmapFactory.decodeFile(path));
         picture[number] = mypicture;
+        name[number] = myname;
         if (!TextUtils.isEmpty(path) ) {
-        //    Log.d(String.valueOf(myname),"就是这个，你看着办吧");
+            Log.d(String.valueOf(myname),"就是这个，你看着办吧");
             signList.add(mypicture);
             nameList.add(myname);
             int len = signList.size();

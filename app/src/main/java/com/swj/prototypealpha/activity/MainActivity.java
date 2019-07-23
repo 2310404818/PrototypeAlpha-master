@@ -11,6 +11,10 @@ import android.widget.TextView;
 
 import com.swj.prototypealpha.R;
 
+/**
+ * 主界面，完成fragment的挂靠
+ * 首页、个人中心
+ */
 public class MainActivity extends AppCompatActivity
 {
     TextView tv_title;

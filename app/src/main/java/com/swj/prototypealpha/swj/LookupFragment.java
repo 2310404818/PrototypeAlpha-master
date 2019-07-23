@@ -1,23 +1,22 @@
 package com.swj.prototypealpha.swj;
 
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.swj.prototypealpha.R;
 import com.swj.prototypealpha.activity.ChooseCheckPerson;
-import com.swj.prototypealpha.swj.util.ItemBean;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -27,6 +26,9 @@ import java.util.List;
 
 /**
  * 审阅界面
+ * 检查项目、检查地点、检查时间、检查人、记录人、被检查人、建设单位
+ * 监理单位、基本情况、执法措施和要求、签名
+ * 开始签名、记录提交
  */
 
 public class LookupFragment extends Fragment {
@@ -55,10 +57,10 @@ public class LookupFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_lookup, container, false);
     }
     public void initData(){
-        Log.d(String.valueOf(ChooseCheckPerson.flag),"重大降低哦按实际地啊降低哦阿三降低哦啊");
         if (ChooseCheckPerson.flag!=0){
             nameList.clear();
             signList.clear();
+     //       Log.d(String.valueOf(ChooseCheckPerson.flag),"的哈的话送降低哦啊降低哦啊降低哦按实际");
             for (int i=0;i<ChooseCheckPerson.flag;i++)
             {
                 nameList.add(ChooseCheckPerson.name[i]);
@@ -66,26 +68,53 @@ public class LookupFragment extends Fragment {
             }
             signadapter.notifyDataSetChanged();
         }
-/*        if (ChooseCheckPerson.flag==1)
-        {
-        //    Log.d("和大伙都","你打好嗲花大沙嗲收到货");
-            nameList.clear();
-            signList.clear();
-            nameList.add(ChooseCheckPerson.name[0]);
-            signList.add(ChooseCheckPerson.picture[0]);
-            nameList.add(ChooseCheckPerson.name[1]);
-            signList.add(ChooseCheckPerson.picture[1]);
-            nameList.add(ChooseCheckPerson.name[2]);
-            signList.add(ChooseCheckPerson.picture[2]);
-            nameList.add(ChooseCheckPerson.name[3]);
-            signList.add(ChooseCheckPerson.picture[3]);
-            nameList.add(ChooseCheckPerson.name[4]);
-            signList.add(ChooseCheckPerson.picture[4]);
-            signadapter.notifyDataSetChanged();
-        }
-*/
+
     }
 
+    /**
+     * 点击发起签名弹出框
+     * 点击提交弹出框
+     *
+     */
+    public void DialogFor(){
+        AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
+                .setTitle("确定发起签名？")
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent =new Intent(getActivity(),ChooseCheckPerson.class);
+                        startActivityForResult(intent, 202);
+                    }
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                })
+                .create();
+        alertDialog.show();
+    }
+    public void Dialog(){
+        AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
+                .setTitle("确定提交检查记录？提交以后不可修改")
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(getActivity(),"记录已提交",Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(getActivity(),CheckPerson.class);
+                        startActivity(intent);
+                    }
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                })
+                .create();
+        alertDialog.show();
+    }
     @Override
     public void onActivityCreated (@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -115,16 +144,17 @@ public class LookupFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent =new Intent(getActivity(),ChooseCheckPerson.class);
-           //     startOnActivity(intent);
-                startActivityForResult(intent, 202);
+                    DialogFor();
+         //       Intent intent =new Intent(getActivity(),ChooseCheckPerson.class);
+           //     startActivityForResult(intent, 202);
             }
         });
         button_complete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(),CheckPerson.class);
-                startActivity(intent);
+            //    Intent intent = new Intent(getActivity(),CheckPerson.class);
+          //      startActivity(intent);
+                Dialog();
             }
         });
 
@@ -132,27 +162,6 @@ public class LookupFragment extends Fragment {
         re_picture.setLayoutManager(new GridLayoutManager(getActivity(),2));
         signadapter= new SignAdapter(signList,nameList);
         re_picture.setAdapter(signadapter);
-
-/*
-        signList.clear();
-        nameList.clear();
-        ChargePerson name = new ChargePerson("执法人员");
-        ChargePerson name1 = new ChargePerson("执法人员1");
-        ChargePerson name2 = new ChargePerson("执法人员2");
-       // nameList.add(name);
-        Picture picture = new Picture(BitmapFactory.decodeResource(getResources(),R.mipmap.sign1));
-        Picture picture1 = new Picture(BitmapFactory.decodeResource(getResources(),R.mipmap.sign2));
-        Picture picture2 = new Picture(BitmapFactory.decodeResource(getResources(),R.mipmap.sign3));
-        signList.add(picture);
-        nameList.add(name);
-        signList.add(picture1);
-        nameList.add(name1);
-        signList.add(picture2);
-        nameList.add(name2);
-        int len = signList.size();
-        signadapter.notifyDataSetChanged();
-        */
-
 
 
     }

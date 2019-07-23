@@ -2,6 +2,15 @@ package com.swj.prototypealpha.Enity;
 
 import java.io.Serializable;
 
+/**
+ * 近期通知实体类
+ * 标题
+ * 发布时间
+ * 通知内容
+ * 发件人
+ * 稿件来源单位
+ *
+ */
 public class NoticeEntity implements Serializable {
     private  String title;
     private String time;

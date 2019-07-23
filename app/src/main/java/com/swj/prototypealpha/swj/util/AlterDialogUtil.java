@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 
+/**
+ * 弹出框工具类
+ */
 public class AlterDialogUtil {
 
     public static void setAlterDialog(final Activity activity, String title, String message)

@@ -1,9 +1,7 @@
 package com.swj.prototypealpha.activity;
 
-import android.content.Intent;
+import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,27 +11,41 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ArrayAdapter;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
+import com.swj.prototypealpha.MyApplication;
 import com.swj.prototypealpha.R;
-import com.swj.prototypealpha.swj.CheckPerson;
 import com.swj.prototypealpha.swj.util.searchView.ClearEditText;
 import com.swj.prototypealpha.swj.util.searchView.PinyinComparator;
 import com.swj.prototypealpha.swj.util.searchView.PinyinUtils;
-import com.swj.prototypealpha.swj.util.searchView.SearchView;
 import com.swj.prototypealpha.swj.util.searchView.SortAdapter;
-import com.swj.prototypealpha.swj.util.searchView.SortAdapter.OnItemClickListener;
 import com.swj.prototypealpha.swj.util.searchView.SortModel;
 import com.swj.prototypealpha.swj.util.searchView.TitleItemDecoration;
 import com.swj.prototypealpha.swj.util.searchView.WaveSideBar;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * 添加检查人的界面
+ * 检查人列表
+ * 完成类似于联系人列表的界面
+ * @author ql
+ * @date 2019/7
+ */
 public class ChoosePerson extends AppCompatActivity {
-    private static final String TAG = "MainActivity";
+    private static final String TAG = "ChoosePerson";
     private RecyclerView mRecyclerView;
     private WaveSideBar mSideBar;
     private SortAdapter mAdapter;
@@ -41,19 +53,30 @@ public class ChoosePerson extends AppCompatActivity {
     private LinearLayoutManager manager;
     private Toolbar tlb_person;
     private List<SortModel> mDateList;
+    private List<String> mDate;
     private TitleItemDecoration mDecoration;
+    MyApplication myApplication;
+
+
 
     /**
      * 根据拼音来排列RecyclerView里面的数据类
      */
     private PinyinComparator mComparator;
 
+
+    @SuppressLint("HandlerLeak")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_person);
+        mDate =  new ArrayList<>();
+        myJsonArray();
         initViews();
         initUI();
+
+
+
 
     }
     private void initUI()
@@ -64,43 +87,25 @@ public class ChoosePerson extends AppCompatActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+
     }
-    private void initViews() {
+    private void intiadapterUI(){
+
+        mDateList = filledData(mDate);
         mComparator = new PinyinComparator();
-
-        mSideBar = (WaveSideBar) findViewById(R.id.sideBar);
-
-        //设置右侧SideBar触摸监听
-        mSideBar.setOnTouchLetterChangeListener(new WaveSideBar.OnTouchLetterChangeListener() {
-            @Override
-            public void onLetterChange(String letter) {
-                //该字母首次出现的位置
-                int position = mAdapter.getPositionForSection(letter.charAt(0));
-                if (position != -1) {
-                    manager.scrollToPositionWithOffset(position, 0);
-                }
-            }
-        });
-
-        mRecyclerView = (RecyclerView) findViewById(R.id.rv);
-        mDateList = filledData(getResources().getStringArray(R.array.date));
-
         // 根据a-z进行排序源数据
         Collections.sort(mDateList, mComparator);
-
         //RecyclerView设置manager
         manager = new LinearLayoutManager(this);
         manager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(manager);
-
         mAdapter = new SortAdapter(this, mDateList);
         mRecyclerView.setAdapter(mAdapter);
+        //头部悬停
         mDecoration = new TitleItemDecoration(this, mDateList);
         //如果add两个，那么按照先后顺序，依次渲染。
         mRecyclerView.addItemDecoration(mDecoration);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(ChoosePerson.this, DividerItemDecoration.VERTICAL));
-
-
         mClearEditText = (ClearEditText) findViewById(R.id.filter_edit);
 
         //根据输入框输入值的改变来过滤搜索
@@ -123,6 +128,48 @@ public class ChoosePerson extends AppCompatActivity {
 
             }
         });
+
+    }
+    private void initViews() {
+
+
+        mSideBar = (WaveSideBar) findViewById(R.id.sideBar);
+
+        //设置右侧SideBar触摸监听
+        mSideBar.setOnTouchLetterChangeListener(new WaveSideBar.OnTouchLetterChangeListener() {
+            @Override
+            public void onLetterChange(String letter) {
+                //该字母首次出现的位置
+                int position = mAdapter.getPositionForSection(letter.charAt(0));
+                if (position != -1) {
+                    manager.scrollToPositionWithOffset(position, 0);
+                }
+            }
+        });
+
+
+        mRecyclerView = (RecyclerView) findViewById(R.id.rv);
+        /*
+        mDate.add("降低阿吉");
+        mDate.add("张三");
+        mDate.add("李四");
+        mDate.add("往往也" );
+        mDate.add("端数据");
+        mDate.add("讲大局");
+        mDate.add("的佳绩");
+        mDate.add("咯扣扣");;
+        mDate.add("偶u和");
+        mDate.add("瓯剧呼呼");
+        mDate.add("禹贡比那好你");
+        mDate.add("容妃娘娘");
+        mDate.add("你那有");
+        mDate.add("不愿意和你");
+        mDate.add("徐虎");
+        */
+
+
+
+
     }
 
 
@@ -132,14 +179,14 @@ public class ChoosePerson extends AppCompatActivity {
      * @param date
      * @return
      */
-    private List<SortModel> filledData(String[] date) {
+    private List<SortModel> filledData(List<String> date) {
         List<SortModel> mSortList = new ArrayList<>();
 
-        for (int i = 0; i < date.length; i++) {
+        for (int i = 0; i < date.size(); i++) {
             SortModel sortModel = new SortModel();
-            sortModel.setName(date[i]);
+            sortModel.setName(date.get(i));
             //汉字转换成拼音
-            String pinyin = PinyinUtils.getPingYin(date[i]);
+            String pinyin = PinyinUtils.getPingYin(date.get(i));
             String sortString = pinyin.substring(0, 1).toUpperCase();
 
             // 正则表达式，判断首字母是否是英文字母
@@ -164,7 +211,7 @@ public class ChoosePerson extends AppCompatActivity {
         List<SortModel> filterDateList = new ArrayList<>();
 
             if (TextUtils.isEmpty(filterStr)) {
-            filterDateList = filledData(getResources().getStringArray(R.array.date));
+            filterDateList = filledData(mDate);
         } else {
             filterDateList.clear();
             for (SortModel sortModel : mDateList) {
@@ -196,4 +243,49 @@ public class ChoosePerson extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    /**
+     * 服务器拉取数据
+     */
+
+    public void myJsonArray(){
+        final List<String> myData =new ArrayList<>();
+//       mDateList.clear();
+        RequestQueue requestQueue =Volley.newRequestQueue(getApplicationContext());
+        myApplication = (MyApplication) getApplication();
+        String name = myApplication.getTell();
+        String url = "http://257v7842r5.wicp.vip/mobile_inspection_war/Users?tell="+name;
+        JsonArrayRequest jsonArrayRequest =new JsonArrayRequest(Request.Method.POST,url, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                try {
+                    for (int i = 0; i < response.length(); i++) {
+                        JSONObject Project = (JSONObject) response.get(i);
+                        String name = Project.getString("UserName");
+                        myData.add(name);
+                      //  Log.d(name,"              街道手机哦");
+                    }
+                    mDate = myData;
+                  //  Log.d(String.valueOf(mDate),"降低阿吉带");
+                    intiadapterUI();
+                //    Log.d(String.valueOf(myData),"23快递阿斯达克");
+                } catch (JSONException e) {
+               //    Log.d("11111111111","1111111111111111111");
+                    e.printStackTrace();
+
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+             //   Log.d("22222222222222222","2222222222222222");
+                VolleyLog.d(TAG,"Error: "+error.getMessage());
+                //   Toast.makeText(getApplicationContext(),"很嗲回答是大号",Toast.LENGTH_SHORT).show();
+            }
+        });
+        requestQueue.add(jsonArrayRequest);
+
+
+    }
+
 }

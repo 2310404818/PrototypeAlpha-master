@@ -10,10 +10,13 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.CycleInterpolator;
 import android.view.animation.TranslateAnimation;
-import android.widget.EditText;
 
 import com.swj.prototypealpha.R;
 
+/**
+ * 搜索栏
+ * 搜索框自定义控件
+ */
 public class ClearEditText extends android.support.v7.widget.AppCompatEditText implements
         View.OnFocusChangeListener, TextWatcher {
     private Drawable mClearDrawable;

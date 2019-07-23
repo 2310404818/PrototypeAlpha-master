@@ -42,7 +42,7 @@
     <ImageView
         android:id="@+id/imageView5"
         android:layout_width="0dp"
-        android:layout_height="241dp"
+        android:layout_height="164dp"
         android:background="@mipmap/workproject"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"

@@ -4,7 +4,9 @@ import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-
+/**
+ * 手写签名对应的一个实体类
+ */
 public class Picture implements Parcelable
 {
     private Bitmap imageID;

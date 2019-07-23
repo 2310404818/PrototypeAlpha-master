@@ -32,8 +32,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static android.app.Activity.RESULT_FIRST_USER;
-
 /**
  * 发起检查
  * 照片工具类
@@ -80,8 +78,8 @@ public class PictureFragment extends Fragment {
     @Override
     public View onCreateView (LayoutInflater inflater, ViewGroup container,
                               Bundle savedInstanceState) {
-        List<Picture> pictures = new ArrayList<>();
-        pictureList.add(pictures);
+
+        Log.d(String.valueOf(pictureList.size()),"接待哦降低哦阿三降低哦阿三降低哦按实际");
         return inflater.inflate(R.layout.fragment_picture, container, false);
     }
 
@@ -89,14 +87,13 @@ public class PictureFragment extends Fragment {
     public void onActivityCreated (@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         fabtn_picture = getActivity().findViewById(R.id.fabtn_takephoto);
-
         fabtn_picture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick (View v) {
+          //      Log.d("还是说是你？","到的骄傲手机哦叫降低哦按实际");
                 takePhoto();
             }
         });
-
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recv_photo = getActivity().findViewById(R.id.recv_photo);
@@ -139,6 +136,9 @@ public class PictureFragment extends Fragment {
     }
 
     private void takePhoto () {
+        List<Picture> pictures = new ArrayList<>();
+        pictureList.add(pictures);
+        //Log.d("难道是你被重复调用了？","到好滴哦啊和哦");
         Date date = new Date(System.currentTimeMillis());
         SimpleDateFormat dateFormat = new SimpleDateFormat("'IMG'_yyyyMMdd_HHmmss");
 
@@ -158,40 +158,41 @@ public class PictureFragment extends Fragment {
         else
             imageUri = Uri.fromFile(outputImage);
 
-        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+        Intent intent = new Intent("android.media.action.IMAGE _CAPTURE");
         intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
         startActivityForResult(intent, TAKE_PHOTO);
     }
 
     @Override
     public void onActivityResult (int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode,resultCode,data);
+     //   Log.d("重复被调用","真的被一直重复调用");
         switch (requestCode) {
             case TAKE_PHOTO:
-                if (requestCode == RESULT_FIRST_USER) {
-                    try {
-                        Bitmap bitmap =
-                                BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(imageUri));
-                        switch (getBitmapDegree()) {
-                            case 90:
-                                bitmap = rotateBitmapByDegree(bitmap, 90);
-                                break;
-                            case 180:
-                                bitmap = rotateBitmapByDegree(bitmap, 180);
-                                break;
-                            case 270:
-                                bitmap = rotateBitmapByDegree(bitmap, 270);
-                                break;
-                            default:
-                                break;
-                        }
-                        Picture picture = new Picture(bitmap);
-                        pictureList.get(0).add(picture);
-                        int len = pictureList.size();
-                        adapter.notifyItemChanged(len - 1);
-                        adapter.notifyItemChanged(0, len);
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
+                try {
+                    Bitmap bitmap =
+                            BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(imageUri));
+                    switch (getBitmapDegree()) {
+                        case 90:
+                            bitmap = rotateBitmapByDegree(bitmap, 90);
+                            break;
+                        case 180:
+                            bitmap = rotateBitmapByDegree(bitmap, 180);
+                            break;
+                        case 270:
+                            bitmap = rotateBitmapByDegree(bitmap, 270);
+                            break;
+                        default:
+                            break;
                     }
+
+                    Picture picture = new Picture(bitmap);
+                    pictureList.get(0).add(picture);
+                    int len = pictureList.size();
+                    adapter.notifyItemChanged(len - 1);
+                    adapter.notifyItemChanged(0, len);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
                 }
                 break;
             default:

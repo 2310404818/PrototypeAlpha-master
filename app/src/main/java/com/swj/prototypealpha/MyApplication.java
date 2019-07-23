@@ -9,7 +9,40 @@ import com.swj.prototypealpha.swj.util.Utils;
 public class MyApplication extends Application
 {
     private static MyApplication appContext;
+    private String idcard,name,age,tell,password,workNumber,sex;
+    public void PersonInfo(String tell,String name,String password,String idcard,String workNumber,String sex,String age){
+        this.name =name;
+        this.idcard = idcard;
+        this.password = password;
+        this.sex = sex;
+        this.workNumber = workNumber;
+        this.tell = tell;
+        this.age = age;
 
+    }
+    public String getName()
+    {
+        return name;
+    }
+    public String getIdcard()
+    {
+        return idcard;
+    }
+    public String getAge(){
+        return age;
+    }
+    public String getTell(){
+        return tell;
+    }
+    public String getPassword(){
+        return password;
+    }
+    public String getWorkNumber(){
+        return workNumber;
+    }
+    public String getSex(){
+        return sex;
+    }
     public static MyApplication getInstance()
     {
         return appContext;

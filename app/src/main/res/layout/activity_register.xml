@@ -42,6 +42,7 @@
         app:layout_constraintTop_toBottomOf="@id/text_re_title">
 
         <android.support.design.widget.TextInputEditText
+            android:id="@+id/myphone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="手机号码" />
@@ -59,6 +60,7 @@
         app:layout_constraintTop_toBottomOf="@+id/text_re_phone">
 
         <android.support.design.widget.TextInputEditText
+            android:id="@+id/mycode"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="手机验证码" />
@@ -93,6 +95,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <android.support.design.widget.TextInputEditText
+            android:id="@+id/mypassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="密码"
@@ -111,6 +114,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <android.support.design.widget.TextInputEditText
+            android:id="@+id/myname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="名称"/>
@@ -128,6 +132,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <android.support.design.widget.TextInputEditText
+            android:id="@+id/myage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="年龄" />
@@ -145,6 +150,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <android.support.design.widget.TextInputEditText
+            android:id="@+id/mysex"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="性别"/>
@@ -162,6 +168,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <android.support.design.widget.TextInputEditText
+            android:id="@+id/myidcard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="身份证"/>
@@ -179,6 +186,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <android.support.design.widget.TextInputEditText
+            android:id="@+id/myjobcode"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="职务" />
