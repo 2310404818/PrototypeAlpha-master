@@ -166,14 +166,10 @@ public class ResetPasswordActivity extends AppCompatActivity implements View.OnC
                 String code = phonecode_reset.getText().toString();
                 boolean phoneFlag = isPhone(phoneNumber1);
                 boolean passFlag = isCorrect(newpassword,password_rese,code);
-
                 if (passFlag && phoneFlag)
                 {
                     ResetRequest(phoneNumber1,newpassword,code);
                 }
-         //       intent = new Intent(ResetPasswordActivity.this,LoginActivity.class);
-          //      startActivity(intent);
-            //    ResetPasswordActivity.this.finish();
                 break;
             default:
                 break;
@@ -216,7 +212,7 @@ public class ResetPasswordActivity extends AppCompatActivity implements View.OnC
      * 检验验证码
      */
     public void sendSMS(final String phoneNumber){
-        String url = "http://257v7842r5.wicp.vip/mobile_inspection_war/SendSmsServlet";
+        String url = "http://47.102.119.140:8080/mobile_inspection_war/SendSmsServlet";
         String tag = "SendSms";
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.cancelAll(tag);
@@ -266,7 +262,7 @@ public class ResetPasswordActivity extends AppCompatActivity implements View.OnC
      */
     public  void ResetRequest(final String accountNumber, final String password,final String code) {
         //请求地址
-        String url = "http://257v7842r5.wicp.vip/mobile_inspection_war/ResetPassword";    //注①
+        String url = "http://47.102.119.140:8080/mobile_inspection_war/ResetPassword";    //注①
         String tag = "ResetPassword";    //注②
 
         //取得请求队列

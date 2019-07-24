@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".oyjz.PersonalinfoActivity">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="#F0F3F6"
+        >
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/text_ps_back"
@@ -13,184 +13,116 @@
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+   />
 
-    <TextView
-        android:id="@+id/text_ps_phone"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:layout_marginLeft="8dp"
-        android:textSize="20sp"
-        android:text="手机号码"
-        app:layout_constraintTop_toBottomOf="@+id/text_ps_back"
-        app:layout_constraintLeft_toLeftOf="parent"
-        />
+        <LinearLayout style="@style/wrap_layout" >
+            <!-- 上圆角-->
+            <LinearLayout style="@style/top_layout">
 
-    <TextView
-        android:id="@+id/person_phone"
-        android:layout_width="251dp"
-        android:layout_height="24dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginRight="8dp"
-        android:text="123456789"
-        android:textColor="@android:color/black"
-        android:textSize="16sp"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/text_ps_phone"
-        app:layout_constraintTop_toTopOf="@+id/text_ps_phone" />
+                <TextView
+                    style="@style/usertext"
+                    android:layout_width="10dp"
+                    android:text="手机号" />
 
+                <TextView
+                    android:id="@+id/person_phone"
+                    style="@style/usertext"
+                    android:layout_width="125dp"
+                    android:text="15574908741" />
+               <!-- <ImageView style="@style/img_arrow"/> -->
+            </LinearLayout>
 
-    <TextView
-        android:id="@+id/text_ps_name"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:layout_marginLeft="8dp"
-        android:textSize="20sp"
-        android:text="名称"
-        app:layout_constraintTop_toBottomOf="@+id/text_ps_phone"
-        app:layout_constraintLeft_toLeftOf="parent"
-        />
+            <!-- 分割线 -->
+            <View style="@style/bg_line"/>
+            <!-- 无圆角-->
+            <LinearLayout style="@style/mid_layout">
 
-    <EditText
-        android:id="@+id/person_name"
-        android:layout_width="259dp"
-        android:layout_height="46dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginRight="8dp"
-        android:text="名嘎"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintLeft_toRightOf="@+id/text_ps_name"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_ps_phone" />
+                <TextView
+                    style="@style/usertext"
+                    android:layout_width="9dp"
+                    android:text="名称" />
 
+                <EditText
+                    android:id="@+id/person_name"
+                    style="@style/usertext"
+                    android:layout_width="125dp"
+                    android:background="@null"
+                    android:text="张三" />
 
+                <!--    <ImageView style="@style/img_arrow"/> -->
+            </LinearLayout>
+            <!-- 分割线 -->
+            <View style="@style/bg_line"/>
+            <!-- 无圆角-->
+            <LinearLayout style="@style/mid_layout">
 
-    <TextView
-        android:id="@+id/text_ps_age"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:layout_marginLeft="8dp"
-        android:textSize="20sp"
-        android:text="年龄"
-        app:layout_constraintTop_toBottomOf="@+id/text_ps_name"
-        app:layout_constraintLeft_toLeftOf="parent"
-        />
+                <TextView
+                    style="@style/usertext"
+                    android:layout_width="22dp"
+                    android:text="性别" />
 
-    <EditText
-        android:id="@+id/person_age"
-        android:layout_width="240dp"
-        android:layout_height="45dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginRight="8dp"
-        android:text="23"
-        app:layout_constraintHorizontal_bias="0.321"
-        app:layout_constraintLeft_toRightOf="@+id/text_ps_age"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_ps_name" />
+                <EditText
+                    android:id="@+id/person_sex"
+                    style="@style/usertext"
+                    android:layout_width="137dp"
+                    android:background="@null"
+                    android:text="男" />
+
+                <!--    <ImageView style="@style/img_arrow"/> -->
+            </LinearLayout>
+            <!-- 分割线 -->
+            <View style="@style/bg_line"/>
+            <!-- 无圆角-->
+            <LinearLayout style="@style/mid_layout">
+                <TextView style="@style/usertext" android:text="身份证" />
+                <TextView
+                    android:layout_gravity="left"
+                    android:id="@+id/person_id"
+                    style="@style/usertext" android:text="340823199504076852" />
+
+                <!--    <ImageView style="@style/img_arrow"/> -->
+            </LinearLayout>
 
 
-    <TextView
-        android:id="@+id/text_ps_sex"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:layout_marginLeft="8dp"
-        android:textSize="20sp"
-        android:text="性别"
-        app:layout_constraintTop_toBottomOf="@+id/text_ps_age"
-        app:layout_constraintLeft_toLeftOf="parent"
-        />
+            <View style="@style/bg_line"/>
+            <!-- 无圆角-->
+            <LinearLayout style="@style/mid_layout">
+                <TextView style="@style/usertext" android:text="年龄" />
 
-    <EditText
-        android:id="@+id/person_sex"
-        android:layout_width="245dp"
-        android:layout_height="46dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginRight="8dp"
-        android:text="男"
-        app:layout_constraintHorizontal_bias="0.347"
-        app:layout_constraintLeft_toRightOf="@+id/text_ps_sex"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_ps_age" />
+                <EditText
+                    android:id="@+id/person_age"
+                    style="@style/usertext"
+                    android:layout_width="145dp"
+                    android:background="@null"
+                    android:text="25" />
+            <!--    <ImageView style="@style/img_arrow"/>  -->
+            </LinearLayout>
+            <View style="@style/bg_line"/>
+            <!-- 下圆角-->
+            <LinearLayout style="@style/bottom_layout">
+                <TextView style="@style/usertext" android:text="工号" />
 
-
-    <TextView
-        android:id="@+id/text_ps_id"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:layout_marginLeft="8dp"
-        android:textSize="20sp"
-        android:text="身份证"
-        app:layout_constraintTop_toBottomOf="@+id/text_ps_sex"
-        app:layout_constraintLeft_toLeftOf="parent"
-        />
-
-    <TextView
-        android:id="@+id/person_id"
-        android:layout_width="253dp"
-        android:layout_height="33dp"
-        android:layout_marginTop="28dp"
-        android:layout_marginRight="8dp"
-        android:text="16165161616156156"
-        android:textColor="@android:color/black"
-        android:textSize="16sp"
-        app:layout_constraintHorizontal_bias="0.6"
-        app:layout_constraintLeft_toRightOf="@+id/text_ps_id"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_ps_sex" />
+                <TextView
+                    android:id="@+id/person_job"
+                    style="@style/usertext"
+                    android:layout_width="148dp"
+                    android:text="15151515" />
+                <!--    <ImageView style="@style/img_arrow"/>  -->
+            </LinearLayout>
 
 
-    <TextView
-        android:id="@+id/text_ps_job"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="30dp"
-        android:text="工号"
-        android:textSize="20sp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_ps_id" />
-
-    <TextView
-        android:id="@+id/person_job"
-        android:layout_width="247dp"
-        android:layout_height="27dp"
-        android:layout_marginTop="28dp"
-        android:layout_marginRight="8dp"
-        android:text="工号"
-        android:textColor="@android:color/black"
-        android:textSize="16sp"
-        app:layout_constraintHorizontal_bias="0.38"
-        app:layout_constraintLeft_toRightOf="@+id/text_ps_job"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_ps_id" />
+        </LinearLayout>
 
 
-    <Button
-        android:id="@+id/text_ps_modify"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:background="@drawable/btn_bg"
-        android:text="修改个人信息"
-        android:textColor="@android:color/white"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_ps_job"
-        app:layout_constraintVertical_bias="0.0" />
+        <!-- 全圆角-->
+        <LinearLayout style="@style/wrap_layout">
+            <LinearLayout style="@style/single_layout">
+                <TextView
+                    android:id="@+id/mybutton"
+                    style="@style/usertext" android:text="完成修改"/>
+                <ImageView style="@style/img_arrow"/>
+            </LinearLayout>
 
+        </LinearLayout>
 
-
-</android.support.constraint.ConstraintLayout>
+    </LinearLayout>

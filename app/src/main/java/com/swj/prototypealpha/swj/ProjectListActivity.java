@@ -132,13 +132,7 @@ public class ProjectListActivity extends AppCompatActivity  {
         setContentView(R.layout.activity_project_list);
         initUI();
         initViews();
-      //  itemList=myJsonArray();
-
-        itemList=Update();
-        old_Data = itemList;
-        mAdapter = new MyItemAdapter();
-        rv_project_list.setAdapter(mAdapter);
-
+        itemList=myJsonArray();
     }
 
     /**
@@ -198,7 +192,7 @@ public class ProjectListActivity extends AppCompatActivity  {
         itemList.clear();
 
         RequestQueue requestQueue =Volley.newRequestQueue(this);
-        String url = "http://257v7842r5.wicp.vip/mobile_inspection_war/Project";
+        String url = "http://47.102.119.140:8080/mobile_inspection_war/Project";
         JsonArrayRequest jsonArrayRequest =new JsonArrayRequest(Request.Method.POST,url, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {

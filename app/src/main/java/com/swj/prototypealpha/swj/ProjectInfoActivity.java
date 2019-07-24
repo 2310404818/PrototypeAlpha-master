@@ -70,58 +70,10 @@ public class ProjectInfoActivity extends AppCompatActivity implements OnItemClic
         String ProjectName = intent.getStringExtra("title");
         String Address = intent.getStringExtra("address");
 
-     //   ProjectRequest(ProjectName,Address);
+        ProjectRequest(ProjectName,Address);
         initUI();
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        recvv_proinfo.setLayoutManager(layoutManager);
-        adapter = new ItemAdapter(itemList);
-
-        recvv_proinfo.setAdapter(adapter);
-        adapter.setItemClickListener(this);
-        recvv_proinfo.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
-        Update();
     }
-    private void Update()
-    {
-        itemList.clear();
-        Bitmap proj_name = BitmapFactory.decodeResource(getResources(),R.mipmap.project_name);
-        Bitmap proj_addr = BitmapFactory.decodeResource(getResources(),R.mipmap.proj_addr);
-        Bitmap startingtime = BitmapFactory.decodeResource(getResources(),R.mipmap.startingtime);
-        Bitmap builder= BitmapFactory.decodeResource(getResources(),R.mipmap.builder);
-        Bitmap schedule= BitmapFactory.decodeResource(getResources(),R.mipmap.schedule);
-        Bitmap checknote= BitmapFactory.decodeResource(getResources(),R.mipmap.check_note);
-        Bitmap rightArrow = BitmapFactory.decodeResource(getResources(),R.mipmap.right_arrow);
-        Bitmap white  = BitmapFactory.decodeResource(getResources(),R.drawable.border);
-        ItemBean item0 = new ItemBean("项目名称","橘子洲大桥提质改造工程",proj_name,white );
-        ItemBean item1 = new ItemBean("项目地址","岳麓区",proj_addr,white );
-        ItemBean item3 = new ItemBean("开工时间","2018.09",startingtime,white );
-        ItemBean item2 = new ItemBean("建设单位","长沙市工务局",builder,white );
-        ItemBean item6 = new ItemBean("施工单位","湖南省绿林市政景观工程有限公司",builder,white );
-        ItemBean item4 = new ItemBean("监理单位","城规监理",builder,white );
-        ItemBean item5 = new ItemBean("当前进度","已完成20个站点土建工程，7个站点钢结构施工",schedule,white );
-        ItemBean item7 = new ItemBean("检查记录","2月18日，执法服务",checknote,rightArrow);
-
-        itemList.add(item0);
-        adapter.notifyItemChanged(0);
-        itemList.add(item1);
-        adapter.notifyItemChanged(1);
-        itemList.add(item2);
-        adapter.notifyItemChanged(2);
-        itemList.add(item3);
-        adapter.notifyItemChanged(3);
-        itemList.add(item4);
-        adapter.notifyItemChanged(4);
-        itemList.add(item5);
-        adapter.notifyItemChanged(5);
-        itemList.add(item6);
-        adapter.notifyItemChanged(6);
-        itemList.add(item7);
-        adapter.notifyItemChanged(7);
-
-        adapter.notifyItemChanged(0,itemList.size());
-    }
-
     @Override
     public void onItemClick(int position) {
         switch (position){
@@ -154,7 +106,7 @@ public class ProjectInfoActivity extends AppCompatActivity implements OnItemClic
      */
     public void ProjectRequest(final String name, final String address) {
         //请求地址
-        String url = "http://257v7842r5.wicp.vip/mobile_inspection_war/ProjectDetail ";    //注①
+        String url = "http://47.102.119.140:8080/mobile_inspection_war/ProjectDetail ";    //注①
         String tag = "ProjectInfo";    //注②
 
         //取得请求队列

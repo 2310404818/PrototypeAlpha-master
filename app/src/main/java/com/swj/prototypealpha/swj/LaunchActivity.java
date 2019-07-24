@@ -135,58 +135,9 @@ public class LaunchActivity extends AppCompatActivity
         setContentView(R.layout.activity_launch);
 
         initUI();
-     //   itemList = myJsonArray();
-        itemList=Update();
-        old_Data = itemList;
-        mAdapter = new MyItemAdapter();
-
-        recvv_launch.setAdapter(mAdapter);
+        itemList = myJsonArray();
         initViews();
 
-    }
-
-    private List<ItemBean> Update()
-    {
-        ArrayList<ItemBean> myData =new ArrayList<>();
-        itemList.clear();
-        Bitmap leftImage = BitmapFactory.decodeResource(getResources(),R.mipmap.project_item);
-        Bitmap rightArrow = BitmapFactory.decodeResource(getResources(),R.mipmap.add);
-
-        ItemBean item0 = new ItemBean("万家丽路BRT中途停靠站建设项目","万家丽路",leftImage,rightArrow);
-        ItemBean item1 = new ItemBean("橘子洲大桥提质改造工程","岳麓区",leftImage,rightArrow);
-        ItemBean item3 = new ItemBean("湘府路快速化改造建设项目","天心区湘府路段",leftImage,rightArrow);
-        ItemBean item2 = new ItemBean("湘府路快速化改造道路工程","长沙市天心区",leftImage,rightArrow);
-        ItemBean item6 = new ItemBean("湘府路快速化改造工程","长托路与红旗路西南角",leftImage,rightArrow);
-        ItemBean item4 = new ItemBean("市轨道交通洋湖垸消防站","坪塘大道庵子冲",leftImage,rightArrow);
-        ItemBean item5 = new ItemBean("市轨道交通车站公共区装饰装修工程","星沙筑梦园，7个站点钢结构施工",leftImage,rightArrow);
-        ItemBean item7 = new ItemBean("市轨道交通车站地面附属建筑施工项目","长沙市开福区四方坪左岸春天18栋201室",leftImage,rightArrow);
-        ItemBean item8 = new ItemBean("万家丽路BRT中途停靠站建设项目2","万家丽路",leftImage,rightArrow);
-        ItemBean item9 = new ItemBean("橘子洲大桥提质改造工程2","岳麓区",leftImage,rightArrow);
-        ItemBean item10 = new ItemBean("湘府路快速化改造建设项目2","天心区湘府路段",leftImage,rightArrow);
-        ItemBean item11= new ItemBean("湘府路快速化改造道路工程2","长沙市天心区",leftImage,rightArrow);
-        ItemBean item12 = new ItemBean("湘府路快速化改造工程2","长托路与红旗路西南角",leftImage,rightArrow);
-        ItemBean item13 = new ItemBean("市轨道交通洋湖垸消防站2","坪塘大道庵子冲",leftImage,rightArrow);
-        ItemBean item14 = new ItemBean("市轨道交通车站公共区装饰装修工程2","星沙筑梦园，7个站点钢结构施工",leftImage,rightArrow);
-        ItemBean item15 = new ItemBean("市轨道交通车站地面附属建筑施工项目2","长沙市开福区四方坪左岸春天18栋201室",leftImage,rightArrow);
-
-
-        myData.add(item0);
-        myData.add(item1);
-        myData.add(item2);
-        myData.add(item3);
-        myData.add(item4);
-        myData.add(item5);
-        myData.add(item6);
-        myData.add(item7);
-        myData.add(item8);
-        myData.add(item9);
-        myData.add(item10);
-        myData.add(item11);
-        myData.add(item12);
-        myData.add(item13);
-        myData.add(item14);
-        myData.add(item15);
-        return myData;
     }
 
     @Override
@@ -209,7 +160,7 @@ public class LaunchActivity extends AppCompatActivity
         itemList.clear();
 
         RequestQueue requestQueue =Volley.newRequestQueue(this);
-        String url = "http://257v7842r5.wicp.vip/mobile_inspection_war/Project";
+        String url = "http://47.102.119.140:8080/mobile_inspection_war/Project";
         JsonArrayRequest jsonArrayRequest =new JsonArrayRequest(Request.Method.POST,url, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {

@@ -38,9 +38,8 @@
         android:roundIcon="@drawable/ic_launcher_background"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
-        tools:ignore="GoogleAppIndexingWarning"
         android:usesCleartextTraffic="true"
-        >
+        tools:ignore="GoogleAppIndexingWarning">
 
         <!-- <meta-data -->
         <!-- android:name="TencentMapSDK" -->
@@ -141,9 +140,13 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".oyjz.RegisterActivity" />
         <activity android:name=".oyjz.ResetPasswordActivity" />
-        <activity android:name=".oyjz.ShowRecordActivity"></activity>
+        <activity android:name=".oyjz.ShowRecordActivity" />
 
-        <uses-library android:name="org.apache.http.legacy" android:required="false" />
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
+
+
     </application>
 
 </manifest>

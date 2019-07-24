@@ -13,4 +13,10 @@
     <color name="color_white">#FFFFFF</color>
     <color name="btn_press_color">#5677fc</color>
     <color name="btn_pressed_color">#3CA0EC</color>
+
+    <!-- 描边颜色 -->
+    <color name="border_clo">#ccc</color>
+    <color name="text_clo">#333</color>
+    <color name="white">#fff</color>
+    <color name="blue">#419DE4</color>
 </resources>

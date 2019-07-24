@@ -133,7 +133,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
      */
     public  void LoginRequest(final String accountNumber, final String password) {
         //请求地址
-        String url = "http://257v7842r5.wicp.vip/mobile_inspection_war/Login";
+        String url = "http://47.102.119.140:8080/mobile_inspection_war/Login";
         String tag = "Login";
 
         //取得请求队列
@@ -202,7 +202,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
      */
     public void PersonInfoRequest(final String tell) {
         //请求地址
-        String url = "http://257v7842r5.wicp.vip/mobile_inspection_war/UserDetail";    //注①
+        String url = "http://47.102.119.140:8080/mobile_inspection_war/UserDetail";    //注①
         String tag = "PersonInfo";    //注②
 
         //取得请求队列
@@ -342,16 +342,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 editor.apply();
                 shouDiag();
                 LoginRequest(user_name,pass_this);
-
-
-
-
-                /*
-                circleProgressDialog.dismiss();
-                intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
-                LoginActivity.this.finish();
-                */
                 break;
             case R.id.accountlogin:
                 intent = new Intent(LoginActivity.this, PhoneNumberLoginActivity.class);

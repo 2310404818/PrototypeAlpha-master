@@ -146,30 +146,7 @@ public class ChoosePerson extends AppCompatActivity {
                 }
             }
         });
-
-
         mRecyclerView = (RecyclerView) findViewById(R.id.rv);
-        /*
-        mDate.add("降低阿吉");
-        mDate.add("张三");
-        mDate.add("李四");
-        mDate.add("往往也" );
-        mDate.add("端数据");
-        mDate.add("讲大局");
-        mDate.add("的佳绩");
-        mDate.add("咯扣扣");;
-        mDate.add("偶u和");
-        mDate.add("瓯剧呼呼");
-        mDate.add("禹贡比那好你");
-        mDate.add("容妃娘娘");
-        mDate.add("你那有");
-        mDate.add("不愿意和你");
-        mDate.add("徐虎");
-        */
-
-
-
-
     }
 
 
@@ -254,7 +231,7 @@ public class ChoosePerson extends AppCompatActivity {
         RequestQueue requestQueue =Volley.newRequestQueue(getApplicationContext());
         myApplication = (MyApplication) getApplication();
         String name = myApplication.getTell();
-        String url = "http://257v7842r5.wicp.vip/mobile_inspection_war/Users?tell="+name;
+        String url = "http://47.102.119.140:8080/mobile_inspection_war/Users?tell="+name;
         JsonArrayRequest jsonArrayRequest =new JsonArrayRequest(Request.Method.POST,url, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
@@ -263,14 +240,10 @@ public class ChoosePerson extends AppCompatActivity {
                         JSONObject Project = (JSONObject) response.get(i);
                         String name = Project.getString("UserName");
                         myData.add(name);
-                      //  Log.d(name,"              街道手机哦");
                     }
                     mDate = myData;
-                  //  Log.d(String.valueOf(mDate),"降低阿吉带");
                     intiadapterUI();
-                //    Log.d(String.valueOf(myData),"23快递阿斯达克");
                 } catch (JSONException e) {
-               //    Log.d("11111111111","1111111111111111111");
                     e.printStackTrace();
 
                 }
@@ -278,9 +251,7 @@ public class ChoosePerson extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-             //   Log.d("22222222222222222","2222222222222222");
                 VolleyLog.d(TAG,"Error: "+error.getMessage());
-                //   Toast.makeText(getApplicationContext(),"很嗲回答是大号",Toast.LENGTH_SHORT).show();
             }
         });
         requestQueue.add(jsonArrayRequest);

@@ -122,7 +122,7 @@ public class PhoneNumberLoginActivity extends AppCompatActivity implements View.
      * 检验验证码
      */
     public void sendSMS(final String phoneNumber){
-        String url = "http://257v7842r5.wicp.vip/mobile_inspection_war/SendSmsServlet";
+        String url = "http://47.102.119.140:8080/mobile_inspection_war/SendSmsServlet";
         String tag = "SendSms";
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.cancelAll(tag);
@@ -174,7 +174,7 @@ public class PhoneNumberLoginActivity extends AppCompatActivity implements View.
      */
     public  void LoginPhoneRequest(final String accountNumber, final String code) {
         //请求地址
-        String url = "http://257v7842r5.wicp.vip/mobile_inspection_war/LoginByVCode";    //注①
+        String url = "http://47.102.119.140:8080/mobile_inspection_war/LoginByVCode";    //注①
         String tag = "LoginPhone";    //注②
 
         //取得请求队列
@@ -263,8 +263,6 @@ public class PhoneNumberLoginActivity extends AppCompatActivity implements View.
                     editor.putInt("remeber_flag",remamberFlag);
                 }
                 editor.apply();
-         //       intent = new Intent(PhoneNumberLoginActivity.this, MainActivity.class);
-        //        startActivity(intent);
                 String code = phoneCode.getText().toString();
                 if (TextUtils.isEmpty(code)){
                     Toast.makeText(PhoneNumberLoginActivity.this,"验证码不能为空",Toast.LENGTH_SHORT).show();
@@ -276,10 +274,6 @@ public class PhoneNumberLoginActivity extends AppCompatActivity implements View.
                             LoginPhoneRequest(phoneNUmber,code);
                     }
                 }
-
-              //  finish();
-
-
                 break;
             case R.id.phonelogin:
                 intent = new Intent(PhoneNumberLoginActivity.this,LoginActivity.class);
@@ -287,7 +281,6 @@ public class PhoneNumberLoginActivity extends AppCompatActivity implements View.
                 PhoneNumberLoginActivity.this.finish();
                 break;
             case R.id.get_identify_code:
-          //      String phone =
                 String phoneNumber0 = phoneNumber.getText().toString();
                 boolean phoneFlag = isPhone(phoneNumber0);
                 if (phoneFlag){

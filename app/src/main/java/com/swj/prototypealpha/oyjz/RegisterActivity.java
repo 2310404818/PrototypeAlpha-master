@@ -88,7 +88,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
      * 检验验证码
      */
     public void sendSMS(final String phoneNumber){
-        String url = "http://257v7842r5.wicp.vip/mobile_inspection_war/SendSmsServlet";
+        String url = "http://47.102.119.140:8080/mobile_inspection_war/SendSmsServlet";
         String tag = "SendSms";
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.cancelAll(tag);
@@ -138,7 +138,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     public  void RegisterRequest(final String accountNumber, final String password,
                                  final String name, final String age, final String sex, final String idcard, final String jobcode,final String code) {
         //请求地址
-        String url = "http://257v7842r5.wicp.vip/mobile_inspection_war/Register";    //注①
+        String url = "http://47.102.119.140:8080/mobile_inspection_war/Register";    //注①
         String tag = "Register";    //注②
 
         //取得请求队列
@@ -296,7 +296,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                      }
                  }
 
-           //     finish();
                 break;
             default:
                 break;

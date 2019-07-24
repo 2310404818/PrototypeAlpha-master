@@ -79,7 +79,6 @@ public class PictureFragment extends Fragment {
     public View onCreateView (LayoutInflater inflater, ViewGroup container,
                               Bundle savedInstanceState) {
 
-        Log.d(String.valueOf(pictureList.size()),"接待哦降低哦阿三降低哦阿三降低哦按实际");
         return inflater.inflate(R.layout.fragment_picture, container, false);
     }
 
@@ -90,7 +89,6 @@ public class PictureFragment extends Fragment {
         fabtn_picture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick (View v) {
-          //      Log.d("还是说是你？","到的骄傲手机哦叫降低哦按实际");
                 takePhoto();
             }
         });
@@ -138,7 +136,6 @@ public class PictureFragment extends Fragment {
     private void takePhoto () {
         List<Picture> pictures = new ArrayList<>();
         pictureList.add(pictures);
-        //Log.d("难道是你被重复调用了？","到好滴哦啊和哦");
         Date date = new Date(System.currentTimeMillis());
         SimpleDateFormat dateFormat = new SimpleDateFormat("'IMG'_yyyyMMdd_HHmmss");
 
@@ -158,7 +155,7 @@ public class PictureFragment extends Fragment {
         else
             imageUri = Uri.fromFile(outputImage);
 
-        Intent intent = new Intent("android.media.action.IMAGE _CAPTURE");
+        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
         intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
         startActivityForResult(intent, TAKE_PHOTO);
     }

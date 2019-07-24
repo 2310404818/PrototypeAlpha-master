@@ -49,6 +49,7 @@ public class StartActivity extends AppCompatActivity {
         proFragment.setArguments(bundle);
         pictFragment = new PictureFragment();
         lookupFragment = new LookupFragment();
+        lookupFragment.setArguments(bundle);
         wordFragment = new WordFragment();
 
         fragments = new Fragment[]{proFragment,pictFragment,wordFragment,lookupFragment};

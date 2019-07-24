@@ -8,7 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,7 +28,7 @@ import com.swj.prototypealpha.activity.MainActivity;
 public class PersonalinfoActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private EditText person_name,person_age,person_sex;
-    private TextView person_phone,person_id,person_job;
+    private TextView person_phone,person_id,person_job,mybutton;
     MyApplication myApplication;
     public void setToolBar()
     {
@@ -86,8 +85,8 @@ public class PersonalinfoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_personalinfo);
         setToolBar();
         initUI();
-        Button text_ps_modify = (Button) findViewById(R.id.text_ps_modify);
-        text_ps_modify.setOnClickListener(new View.OnClickListener() {
+        mybutton = findViewById(R.id.mybutton);
+        mybutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(PersonalinfoActivity.this,MainActivity.class);
