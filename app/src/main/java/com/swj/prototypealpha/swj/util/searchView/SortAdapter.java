@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.swj.prototypealpha.R;
 
@@ -58,7 +57,7 @@ public class SortAdapter extends RecyclerView.Adapter<SortAdapter.ViewHolder> {
 
                     Activity activity = (Activity) mContext;
                     Intent intent =new Intent();
-                    Toast.makeText(activity,"添加申请已发送",Toast.LENGTH_SHORT).show();
+                //    Toast.makeText(activity,"添加申请已发送",Toast.LENGTH_SHORT).show();
                     intent.putExtra("name",mData.get(position).getName());
                     activity.setResult(111,intent);
 

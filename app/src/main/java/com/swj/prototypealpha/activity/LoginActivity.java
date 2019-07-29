@@ -1,10 +1,20 @@
 package com.swj.prototypealpha.activity;
 
+import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -31,7 +41,10 @@ import com.syd.oden.circleprogressdialog.core.CircleProgressDialog;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -54,11 +67,21 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private CheckBox checkBox_zidong;
     private CheckBox checkBox_remember;
     private ProgressDialog pd =null;
+    private final int mRequestCode = 100;//权限请求码
     //判断记住密码和自动登陆选框是否选中
     private int remamberFlag,zidongFlag;
     private String pass,name;
     private  CircleProgressDialog circleProgressDialog;
     MyApplication myApplication;
+    List<String> mPermissionList = new ArrayList<>();
+    String[] permissions = new String[]{
+            Manifest.permission.WRITE_EXTERNAL_STORAGE, //读写内存权限
+            Manifest.permission.RECORD_AUDIO ,          //录音权限
+            Manifest.permission.ACCESS_FINE_LOCATION,   //定位权限
+            Manifest.permission.READ_PHONE_STATE        //访问手机联系人等权限
+    };
+
+
     private void initUI()
     {
         accountNumber = findViewById(R.id.accountNumber);
@@ -71,6 +94,75 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         checkBox_remember = findViewById(R.id.checkBox2);
     }
 
+    /**
+     * 动态权限统一申请
+     *
+     */
+    //4、权限判断和申请
+    private void initPermission(){
+        mPermissionList.clear();//清空已经允许的没有通过的权限
+        //逐个判断是否还有未通过的权限
+        for (int i = 0;i<permissions.length;i++){
+            if (ContextCompat.checkSelfPermission(this,permissions[i])!=
+                    PackageManager.PERMISSION_GRANTED){
+                mPermissionList.add(permissions[i]);//添加还未授予的权限到mPermissionList中
+            }
+        }
+        //申请权限
+        if (mPermissionList.size()>0){//有权限没有通过，需要申请
+            ActivityCompat.requestPermissions(this,permissions,mRequestCode);
+        }else {
+            //权限已经都通过了，可以将程序继续打开了
+
+        }
+    }
+    /**
+     * 5.请求权限后回调的方法
+     * @param requestCode 是我们自己定义的权限请求码
+     * @param permissions 是我们请求的权限名称数组
+     * @param grantResults 是我们在弹出页面后是否允许权限的标识数组，数组的长度对应的是权限
+     *                     名称数组的长度，数组的数据0表示允许权限，-1表示我们点击了禁止权限
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        boolean hasPermissionDismiss = false;//有权限没有通过
+        if (mRequestCode==requestCode){
+            for (int i=0;i<grantResults.length;i++){
+                if (grantResults[i]==-1){
+                    hasPermissionDismiss=true;
+                    break;
+                }
+            }
+        }
+        if (hasPermissionDismiss){//如果有没有被允许的权限
+      //      Toast.makeText(this,"有权限未赋予权限，将不能正常使用",Toast.LENGTH_SHORT).show();
+           // showPermissionDialog();
+            showWaringDialog();
+        }else {
+            //权限已经都通过了，可以将程序继续打开了
+         //   init();
+        }
+    }
+    /**
+     *  6.不再提示权限时的展示对话框
+     */
+    private void showWaringDialog() {
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setTitle("警告！")
+                .setMessage("请前往设置->应用->住建执法>权限中打开相关权限，否则功能无法正常运行！")
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                        Uri uri = Uri.fromParts("package", getPackageName(), null);
+                        intent.setData(uri);
+                        startActivity(intent);
+                    }
+
+                }).show();
+    }
     private void setOnclickListener()
     {
 
@@ -87,6 +179,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_login);
         initUI();
+        initPermission();
+        File dir1 = new File(Environment.getExternalStorageDirectory(),"住建执法");
+        if(!dir1.exists()){
+            dir1.mkdirs();
+        }
+        myApplication = (MyApplication) getApplication();
+        myApplication.setFile(dir1);
         Intent intent1 =getIntent();
         String log = "YES";
         String log1 =intent1.getStringExtra("log");
@@ -219,7 +318,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         try {
                             myApplication = (MyApplication) getApplication();
                             JSONObject personInfo =  new JSONObject(response);  //获取参数
-                            Log.i("返回参数", String.valueOf(personInfo));
+                     //       Log.i("返回参数", String.valueOf(personInfo));
                             String PersonName =personInfo.getString("userName");
                             String PersonTell = personInfo.getString("tell");
                             String PersonPassword = personInfo.getString("password");

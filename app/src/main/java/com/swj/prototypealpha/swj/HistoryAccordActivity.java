@@ -36,8 +36,6 @@ public class HistoryAccordActivity extends AppCompatActivity implements View.OnC
     {
         tlb_history = findViewById(R.id.tlb_history);
         recv_hitory = findViewById(R.id.recv_history);
-
-
         setSupportActionBar(tlb_history);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setHomeButtonEnabled(true);
@@ -48,16 +46,11 @@ public class HistoryAccordActivity extends AppCompatActivity implements View.OnC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history_accord);
-
         InitUI();
-
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recv_hitory.setLayoutManager(layoutManager);
-
         adapter = new ItemAdapter(itemList);
         recv_hitory.setAdapter(adapter);
-
-
         Update();
     }
 

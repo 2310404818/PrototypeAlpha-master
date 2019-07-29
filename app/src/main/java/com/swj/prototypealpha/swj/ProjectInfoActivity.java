@@ -20,6 +20,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.swj.prototypealpha.MyApplication;
 import com.swj.prototypealpha.R;
 import com.swj.prototypealpha.swj.util.ItemBean;
 import com.swj.prototypealpha.swj.util.OnItemClickListener;
@@ -51,6 +52,7 @@ public class ProjectInfoActivity extends AppCompatActivity implements OnItemClic
     private List<ItemBean> itemList = new ArrayList<>();
 
     private ItemBean[] itemBean = new ItemBean[8];
+    MyApplication myApplication;
     private void initUI()
     {
         recvv_proinfo = findViewById(R.id.recv_pro_info);
@@ -69,7 +71,12 @@ public class ProjectInfoActivity extends AppCompatActivity implements OnItemClic
         Intent intent = getIntent();
         String ProjectName = intent.getStringExtra("title");
         String Address = intent.getStringExtra("address");
-
+        MyApplication myApplication;
+        myApplication = (MyApplication) getApplication();
+        if (ProjectName == null){
+            ProjectName = myApplication.getProjectName();
+            Address = myApplication.getAddress();
+        }
         ProjectRequest(ProjectName,Address);
         initUI();
 
@@ -122,9 +129,9 @@ public class ProjectInfoActivity extends AppCompatActivity implements OnItemClic
                     public void onResponse(String response) {
                         try {
                             itemList.clear();
-                            Log.i("返回参数",response);
+                    //        Log.i("返回参数",response);
                             JSONObject jsonObject =  new JSONObject(response);  //获取参数
-                            Log.i("返回参数", String.valueOf(jsonObject));
+                    //        Log.i("返回参数", String.valueOf(jsonObject));
                             String ProjectName =jsonObject.getString("projectName");
                             String Address = jsonObject.getString("address");
                             String UnitConstruction = jsonObject.getString("unitConstruction");
@@ -179,8 +186,8 @@ public class ProjectInfoActivity extends AppCompatActivity implements OnItemClic
             @Override
             public void onErrorResponse(VolleyError error) {
                 //做自己的响应错误操作，如Toast提示（“请稍后重试”等）
-                Log.d("基地啊涉及到激动静安寺大家哦i的骄傲的","嗲话降低哦家的骄傲的静安寺哦");
-             //   Log.e("TAG", error.getMessage(), error);
+            //    Log.d("基地啊涉及到激动静安寺大家哦i的骄傲的","嗲话降低哦家的骄傲的静安寺哦");
+                Log.e("TAG", error.getMessage(), error);
             }
         }) {
             @Override

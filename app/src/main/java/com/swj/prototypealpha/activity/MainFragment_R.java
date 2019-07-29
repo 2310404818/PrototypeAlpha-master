@@ -2,6 +2,7 @@ package com.swj.prototypealpha.activity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -12,6 +13,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -19,7 +21,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.util.Base64;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +34,9 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 import com.swj.prototypealpha.MyApplication;
 import com.swj.prototypealpha.R;
 import com.swj.prototypealpha.oyjz.PersonalItemView;
@@ -41,10 +45,13 @@ import com.swj.prototypealpha.oyjz.ResetPasswordActivity;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import cz.msebera.android.httpclient.Header;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
@@ -66,14 +73,14 @@ public class MainFragment_R extends Fragment {
     private PopupWindow pw;
     private String imgPath;
     private File outputImage;
+    private static Bitmap myBitmap;
+    private RequestParams params = new RequestParams();
     private String encodedString;
+    private static String path = "/sdcard/myHead/";// sd路径
     public static final int                  TAKE_PHOTO  = 1;
     public static       Uri                  imageUri;
-
-   // private RequestParams params = new RequestParams();
     private static final int RESULT_LOAD_IMG = 0;
     private Bitmap bitmap;
-   // private RequestParams params = new RequestParams();
     MyApplication myApplication;
 
     private void initUI () {
@@ -96,21 +103,16 @@ public class MainFragment_R extends Fragment {
      * 圆形头像
      */
     private void initData(){
-        if (imgPath!=null && !imgPath.isEmpty())
-        {
-            initData1(imgPath);
-        }
-        else {
-            Glide.with(getActivity()).load(R.drawable.touxiang)
+
+        myApplication = (MyApplication) getActivity().getApplication();
+        String name = myApplication.getTell();
+            Glide.with(getActivity()).load("http://47.102.119.140:8080/pic/"+name+".jpg")
                     .bitmapTransform(new BlurTransformation(getActivity(),25,3),new CenterCrop(getActivity()))
                     .into(right_top);
 
-            Glide.with(getActivity()).load(R.drawable.touxiang)
+            Glide.with(getActivity()).load("http://47.102.119.140:8080/pic/"+name+".jpg")
                     .bitmapTransform(new CropCircleTransformation(getActivity()))
                     .into(iv_touxiang);
-        }
-
-
     }
 
     private void initData1(String url){
@@ -179,18 +181,33 @@ public class MainFragment_R extends Fragment {
                 ) {
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
         } else {
-            //wxat = 200;
+
+        }
+        myApplication = (MyApplication) getActivity().getApplication();
+        Bitmap bt = BitmapFactory.decodeFile(path + myApplication.getTell()+".png");
+        initUI();
+        if (bt!=null)
+        {
+        //    Log.d("打打打","大");
+            Glide.with(getActivity()).load(path + myApplication.getTell()+".png")
+                    .bitmapTransform(new BlurTransformation(getActivity(),25,3),new CenterCrop(getActivity()))
+                    .into(right_top);
+
+            Glide.with(getActivity()).load(path + myApplication.getTell()+".png")
+                    .bitmapTransform(new CropCircleTransformation(getActivity()))
+                    .into(iv_touxiang);
+        }
+        else
+        {
+            initData();
         }
 
-        initUI();
-        initData();
         setOnclickLisener();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_main_fragment__r, container, false);
     }
 
@@ -236,7 +253,6 @@ public class MainFragment_R extends Fragment {
             @Override
             public void onClick(View v) {
                 takePhoto();
-              //  Toast.makeText(getActivity(), "拍照 ", Toast.LENGTH_SHORT).show();
                 pw.dismiss();
             }
         });
@@ -268,13 +284,47 @@ public class MainFragment_R extends Fragment {
                 android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(galleryIntent, RESULT_LOAD_IMG);
     }
+    /**
+     * 图片保存到本地
+     *
+     */
+    private void setPicToView(Bitmap mBitmap) {
+        String sdStatus = Environment.getExternalStorageState();
+        if (!sdStatus.equals(Environment.MEDIA_MOUNTED)) { // 检测sd是否可用
+            return;
+        }
+        myApplication = (MyApplication) getActivity().getApplication();
+        FileOutputStream b = null;
+        File file = new File(path);
+        if (!file.exists()){
+            file.mkdirs();// 创建文件夹
+        }
 
+        String fileName =path+ myApplication.getTell()+".png";// 图片名字
+        try {
+            b = new FileOutputStream(fileName);
+            mBitmap.compress(Bitmap.CompressFormat.JPEG, 100, b);// 把数据写入文件
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                // 关闭流
+                b.flush();
+                b.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
-
-
-
-
-    //当图片被选中的返回结果
+    /**
+     * 相册相片选择结果
+     * 照相机照相结果
+     * 写到头像
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
@@ -283,19 +333,18 @@ public class MainFragment_R extends Fragment {
             case RESULT_LOAD_IMG:
                 try {
                     if (resultCode == RESULT_OK && null != data) {
-                        Log.d(resultCode+"      "+RESULT_OK,"11111111111111");
-                        Log.d(String.valueOf(data),"222222222222222222");
                         Uri selectedImage = data.getData();
                         String[] filePathColumn = {MediaStore.Images.Media.DATA};
-
                         // 获取游标
                         Cursor cursor = getActivity().getContentResolver().query(selectedImage, filePathColumn, null, null, null);
                         cursor.moveToFirst();
-
                         int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
                         imgPath = cursor.getString(columnIndex);
                         cursor.close();
                         initData1(imgPath);
+                        uploadImage();
+                        Bitmap head=BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(selectedImage));
+                        setPicToView(head);
                     } else {
                         Toast.makeText(getActivity(), "你未选择图片",
                                 Toast.LENGTH_LONG).show();
@@ -305,7 +354,10 @@ public class MainFragment_R extends Fragment {
                 }
                 break;
             case TAKE_PHOTO:
-                if (imageUri!=null){
+                if (resultCode==Activity.RESULT_CANCELED){
+
+                }
+              else {
                     Glide.with(getActivity()).load(imageUri)
                             .bitmapTransform(new BlurTransformation(getActivity(),25,3),new CenterCrop(getActivity()))
                             .into(right_top);
@@ -313,17 +365,19 @@ public class MainFragment_R extends Fragment {
                     Glide.with(getActivity()).load(imageUri)
                             .bitmapTransform(new CropCircleTransformation(getActivity()))
                             .into(iv_touxiang);
-
-                }
-              else {
-                         }
-
+                    upLoadImage();
+                    try {
+                        Bitmap head=BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(imageUri));
+                        setPicToView(head);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    }
         }
     }
     /**
      * 图片转bit64位
      */
-
     @SuppressLint("StaticFieldLeak")
     public void encodeImagetoString() {
         new AsyncTask<Void, Void, String>() {
@@ -338,7 +392,7 @@ public class MainFragment_R extends Fragment {
                         options);
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 // 压缩图片
-                bitmap.compress(Bitmap.CompressFormat.PNG, 50, stream);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream);
                 byte[] byte_arr = stream.toByteArray();
                 // Base64图片转码为String
                 encodedString = Base64.encodeToString(byte_arr, 0);
@@ -349,10 +403,49 @@ public class MainFragment_R extends Fragment {
             protected void onPostExecute(String msg) {
           //      prgDialog.setMessage("Calling Upload");
                 // 将转换后的图片添加到上传的参数中
-              //  params.put("image", encodedString);
-          //      params.put("filename", editTextName.getText().toString());
+                params.put("image", encodedString);
+                params.put("filename",myApplication.getTell());
                 // 上传图片
-          //      imageUpload();
+                imageUpload();
+            }
+        }.execute(null, null, null);
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    public void encodeImagetoString1() {
+        new AsyncTask<Void, Void, String>() {
+            protected void onPreExecute() {
+            };
+            @Override
+            protected String doInBackground(Void... params) {
+                Bitmap bitmap = null;
+                BitmapFactory.Options options = null;
+                options = new BitmapFactory.Options();
+                options.inSampleSize = 3;
+                try {
+                   bitmap =
+                            BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(imageUri),null,options);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                // 压缩图片
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream);
+                byte[] byte_arr = stream.toByteArray();
+                // Base64图片转码为String
+                encodedString = Base64.encodeToString(byte_arr, 0);
+                return "";
+            }
+
+            @Override
+            protected void onPostExecute(String msg) {
+                //      prgDialog.setMessage("Calling Upload");
+                // 将转换后的图片添加到上传的参数中
+                params.put("image", encodedString);
+                params.put("filename",myApplication.getTell());
+
+                // 上传图片
+                imageUpload();
             }
         }.execute(null, null, null);
     }
@@ -363,18 +456,57 @@ public class MainFragment_R extends Fragment {
     //开始上传图片
     private void uploadImage() {
         if (imgPath != null && !imgPath.isEmpty()) {
-
             encodeImagetoString();
         } else {
             Toast.makeText(getActivity().getApplicationContext(), "You must select image from gallery before you try to upload",
                     Toast.LENGTH_LONG).show();
         }
     }
+    private void upLoadImage(){
+        try {
+            Bitmap bitmap =
+                    BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(imageUri));
+            if (bitmap!=null){
+                encodeImagetoString1();
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void imageUpload() {
+        String url = "http://47.102.119.140:8080/mobile_inspection_war/uploadImage.jsp";
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.post(url, params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                Toast.makeText(getActivity(), "upload success", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                if (statusCode == 404) {
+                    Toast.makeText(getActivity(), "Requested resource not found", Toast.LENGTH_LONG).show();
+                }
+                // 当 Http 响应码'500'
+                else if (statusCode == 500) {
+                    Toast.makeText(getActivity(), "Something went wrong at server end", Toast.LENGTH_LONG).show();
+                }
+                // 当 Http 响应码 404, 500
+                else {
+                    Toast.makeText(getActivity(), "Error Occured n Most Common Error: n1. Device " +
+                                    "not connected to Internetn2. Web App is not deployed in App servern3." +
+                                    " App server is not runningn HTTP Status code : " + statusCode, Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+    }
+
     private void takePhoto () {
         Date date = new Date(System.currentTimeMillis());
         SimpleDateFormat dateFormat = new SimpleDateFormat("'IMG'_yyyyMMdd_HHmmss");
 
-        String filename = dateFormat.format(date) + ".jpg";
+        String filename = dateFormat.format(date) + ".png";
         outputImage = new File(getActivity().getExternalCacheDir(), filename);
         try {
             if (outputImage.exists())

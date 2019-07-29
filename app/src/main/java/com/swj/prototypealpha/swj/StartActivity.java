@@ -42,16 +42,10 @@ public class StartActivity extends AppCompatActivity {
     private void initUI()
     {
         tv_title = findViewById(R.id.mainTitle_start);
-        Bundle bundle = new Bundle();
-        bundle.putString("ProjectName",ProjectName);
-        bundle.putString("Address",address);
         proFragment = new ProjFragment();
-        proFragment.setArguments(bundle);
         pictFragment = new PictureFragment();
         lookupFragment = new LookupFragment();
-        lookupFragment.setArguments(bundle);
         wordFragment = new WordFragment();
-
         fragments = new Fragment[]{proFragment,pictFragment,wordFragment,lookupFragment};
         getSupportFragmentManager().beginTransaction().replace(R.id.main_fagement,proFragment).show(proFragment).commit();
         navigation = findViewById(R.id.navigation_start);
@@ -109,11 +103,12 @@ public class StartActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
-        setToolBar();
+
         Intent intent =getIntent();
         ProjectName = intent.getStringExtra("title");
         address =intent.getStringExtra("address");
         initUI();
+        setToolBar();
     }
 
     private void switchFragment(int lastfragment,int index)

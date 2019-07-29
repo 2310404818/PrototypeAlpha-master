@@ -48,28 +48,14 @@
         android:layout_weight="0.1"
         android:layout_width="match_parent"
         android:layout_height="0dp"/>
-    <FrameLayout
+    <LinearLayout
         android:id="@+id/content_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_margin="10dp"
         android:layout_marginEnd="0dp"
-        android:layout_weight="1">
-
-        <com.swj.prototypealpha.swj.util.searchView.SignatureView
-            android:id="@+id/sv_sign_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center" />
-
-        <TextView
-            android:id="@+id/tv_sign_tip"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:text="请在此区域手写签名！" />
-
+        android:layout_weight="1"
+        android:orientation="vertical">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -93,6 +79,21 @@
                 android:text="确定" />
 
         </LinearLayout>
-    </FrameLayout>
+        <com.swj.prototypealpha.swj.util.searchView.SignatureView
+            android:id="@+id/sv_sign_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center" />
+
+        <TextView
+            android:id="@+id/tv_sign_tip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="请在此区域手写签名！" />
+
+
+    </LinearLayout>
 
 </LinearLayout>

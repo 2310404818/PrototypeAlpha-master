@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import android.widget.ImageView;
 import com.swj.prototypealpha.R;
 import com.swj.prototypealpha.swj.Picture;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TimerTask;
@@ -109,6 +111,8 @@ public class NineGridLayout extends ViewGroup {
         layoutParams();
         for (int i = 0; i < size; i++) {
             Picture url = pictures.get(i);
+          //  File file = new File(url.getPath());
+
             RatioImageView imageView = createImageView(i, url);
             layoutImageView(imageView, i, url);
         }
@@ -131,7 +135,6 @@ public class NineGridLayout extends ViewGroup {
             @Override
             public boolean onTouch (View v, MotionEvent event) {
                 if(event.getAction()==MotionEvent.ACTION_DOWN){
-                    System.out.println("long click");
                     AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
                     dialog.setTitle("照片");
                     dialog.setMessage("确认删除吗？");
@@ -139,6 +142,12 @@ public class NineGridLayout extends ViewGroup {
                         @Override
                         public void onClick (DialogInterface dialog, int which) {
                             pictures.remove(url);
+                            File file = new File(url.getImageID().toString());
+                            Log.d("就嗲家", url.getClass().getClassLoader().toString());
+                            Log.d("kid家具", String.valueOf(url.getImageID()));
+                            Log.d("降低阿吉卡",url.getImageID().toString());
+                            Log.d("降低阿吉接地夹夹", String.valueOf(file));
+                           // url.getImageID()
                             notifyDataSetChanged();
                         }
                     });

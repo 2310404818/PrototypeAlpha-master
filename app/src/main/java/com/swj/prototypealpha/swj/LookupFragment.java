@@ -1,13 +1,18 @@
 package com.swj.prototypealpha.swj;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +28,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 import com.swj.prototypealpha.MyApplication;
 import com.swj.prototypealpha.R;
 import com.swj.prototypealpha.activity.ChooseCheckPerson;
@@ -30,12 +38,16 @@ import com.swj.prototypealpha.activity.ChooseCheckPerson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import cz.msebera.android.httpclient.Header;
 
 
 /**
@@ -46,24 +58,30 @@ import java.util.Map;
  */
 
 public class LookupFragment extends Fragment {
-    TextView             text_look_proj;
-    TextView             text_look_time;
-    TextView             text_look_addr;
-    TextView             text_bulid;
-    TextView             text_check;
-    TextView             text_look_foundation;
-    TextView             text_look_rocord;
-    TextView             text_checkpeople;
-    TextView             text_writepeople;
-    TextView             text_donepeople;
-    Button               button;
-    Button               button_complete;
-    RecyclerView         re_picture;
+    private     TextView             text_look_proj;
+    private     TextView             text_look_time;
+    private     TextView             text_look_addr;
+    private     TextView             text_bulid;
+    private     TextView             text_check;
+    private     TextView             text_look_foundation;
+    private     TextView             text_look_rocord;
+    private     TextView             text_checkpeople;
+    private     TextView             text_writepeople;
+    private     TextView             text_donepeople;
+    private     Button               button;
+    private     Button               button_complete;
+    private     File                 dir ;
+    private     RecyclerView         re_picture;
+    private     SimpleDateFormat     sdf;
+    private     Date                 newTime;
+    private     String               ProjectName;
+    private     String               Address;
+    private     RequestParams        params = new RequestParams();
+    private     String[]             encodedString = new String[6];
+    public      static   SignAdapter signadapter;
+    private     static   List<ChargePerson> nameList = new ArrayList<>();
+    public      static   List<Picture> signList    = new ArrayList<>();
     MyApplication myApplication;
-    public static SignAdapter signadapter;
-    private static List<ChargePerson> nameList = new ArrayList<>();
-    public static   List<Picture> signList    = new ArrayList<>();
-
 
     @Override
     public View onCreateView (LayoutInflater inflater, ViewGroup container,
@@ -72,19 +90,35 @@ public class LookupFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_lookup, container, false);
     }
     public void initData(){
-        if (ChooseCheckPerson.flag!=0){
             nameList.clear();
             signList.clear();
-     //       Log.d(String.valueOf(ChooseCheckPerson.flag),"的哈的话送降低哦啊降低哦啊降低哦按实际");
-            for (int i=0;i<ChooseCheckPerson.flag;i++)
-            {
-                nameList.add(ChooseCheckPerson.name[i]);
-                signList.add(ChooseCheckPerson.picture[i]);
-            }
+            initAutograph();
             signadapter.notifyDataSetChanged();
-        }
 
     }
+    /**
+     * 获取对应目录下的文件
+     */
+    private void initAutograph(){
+        nameList.clear();
+        signList.clear();
+        myApplication = (MyApplication) getActivity().getApplication();
+        String name = dir.getName();
+        //先进入二级目录，在进入三级目录加载三级目录下所有文件
+        File myDir = new File(myApplication.getFile(),myApplication.getProjectName()+"autograph");
+        File dir11 = new File(myDir,name);
+        File[] files = dir11.listFiles();
+        if (files!=null){
+            for (File file : files) {
+                  String nameForMe = file.getName();
+                  ChargePerson myNameFor = new ChargePerson(nameForMe);
+                  nameList.add(myNameFor);
+                  Picture picture = new Picture(BitmapFactory.decodeFile(file.getAbsolutePath()));
+                 signList.add(picture);
+            }
+        }
+    }
+
 
     /**
      * 点击发起签名弹出框
@@ -116,9 +150,21 @@ public class LookupFragment extends Fragment {
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(getActivity(),"记录已提交",Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(getActivity(),CheckPerson.class);
-                        startActivity(intent);
+                        if (signList.size()!=0){
+                            for (int i=0;i<signList.size();i++){
+                                uploadImage(i);
+                            }
+                            Toast.makeText(getActivity(),"记录已提交",Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(getActivity(),CheckPerson.class);
+                            intent.putExtra("title", ProjectName);
+                            intent.putExtra("address",Address);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                        }
+                        else {
+                            Toast.makeText(getActivity(),"未有签名文件，上传失败",Toast.LENGTH_SHORT).show();
+                        }
+
                     }
                 })
                 .setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -137,8 +183,8 @@ public class LookupFragment extends Fragment {
         text_check = getActivity().findViewById(R.id.text_checkproj);
         text_look_time = getActivity().findViewById(R.id.text_currenttime4);
         text_look_addr = getActivity().findViewById(R.id.text_addrproj);
-        Date newTime = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        newTime = new Date();
+        sdf = new SimpleDateFormat("yyyy-MM-dd");
         text_look_time.setText(sdf.format(newTime));
         text_look_proj = getActivity().findViewById(R.id.text_projchenck);
         text_checkpeople = getActivity().findViewById(R.id.text_checkpeople);
@@ -150,15 +196,11 @@ public class LookupFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 DialogFor();
-                //       Intent intent =new Intent(getActivity(),ChooseCheckPerson.class);
-                //     startActivityForResult(intent, 202);
             }
         });
         button_complete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //    Intent intent = new Intent(getActivity(),CheckPerson.class);
-                //      startActivity(intent);
                 Dialog();
             }
         });
@@ -172,22 +214,31 @@ public class LookupFragment extends Fragment {
     @Override
     public void onActivityCreated (@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        String ProjectName = (String) getArguments().get("ProjectName");
-        String Address = (String) getArguments().get("Address");
+        MyApplication myApplication = (MyApplication) getActivity().getApplication();
+        ProjectName = myApplication.getProjectName();
+        Address = myApplication.getAddress();
+        Date date = new Date(System.currentTimeMillis());
+        SimpleDateFormat date1 = new SimpleDateFormat("yyyy-MM-dd");
+        String datenow = date1.format(date);
+        File dir1 = new File(myApplication.getFile(),myApplication.getProjectName()+"autograph");
+        if (!dir1.exists()){
+            dir1.mkdir();
+        }
+        dir = new File(dir1,datenow);
+        if (!dir.exists()){
+            dir.mkdir();
+        }
         ProjectRequest(ProjectName,Address);
         initUI();
+        initAutograph();
 
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 202 && resultCode == 110) {
-            for (int i = 0; i < 5; i++) {
                 initData();
-            }
-        }
+
     }
 
 
@@ -211,9 +262,8 @@ public class LookupFragment extends Fragment {
                     @Override
                     public void onResponse(String response) {
                         try {
-                            Log.i("返回参数",response);
                             JSONObject jsonObject =  new JSONObject(response);  //获取参数
-                            Log.i("返回参数", String.valueOf(jsonObject));
+                         //   Log.i("返回参数", String.valueOf(jsonObject));
                             String ProjectName =jsonObject.getString("projectName");
                             String Address = jsonObject.getString("address");
                             String UnitConstruction = jsonObject.getString("unitConstruction");
@@ -249,16 +299,89 @@ public class LookupFragment extends Fragment {
                 Map<String, String> params = new HashMap<>();
                 params.put("projectName", name);  //注⑥
                 params.put("address", address);
+
                 return params;
             }
         };
-
         //设置Tag标签
         request.setTag(tag);
 
         //将请求添加到队列中
         requestQueue.add(request);
     }
+    /**
+     * 上传照片
+     *
+     */
+     //开始上传图片
+    private void uploadImage(int ix) {
+        int ixf =ix;
+        encodeImagetoString(ixf);
+    }
 
+    @SuppressLint("StaticFieldLeak")
+    public void encodeImagetoString(final int ifor) {
+            final int infor =ifor;
+        new AsyncTask<Void, Void, String>() {
+            protected void onPreExecute() {
+            };
+            @Override
+            protected String doInBackground(Void... params) {
+                Bitmap bitmap = signList.get(infor).getImageID();
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                // 压缩图片
+                bitmap.compress(Bitmap.CompressFormat.PNG, 50, stream);
+                byte[] byte_arr = stream.toByteArray();
+                // Base64图片转码为String
+                encodedString[infor] = Base64.encodeToString(byte_arr, 0);
+                return "";
+            }
+
+            @Override
+            protected void onPostExecute(String msg) {
+                //      prgDialog.setMessage("Calling Upload");
+                // 将转换后的图片添加到上传的参数中
+                params.put("image", encodedString[infor]);
+                params.put("checkName",ProjectName);
+                params.put("signatureName", nameList.get(infor).getName());
+                params.put("date",sdf.format(newTime));
+            //    Log.d(sdf.format(newTime),"大家打架");
+           //     Log.d(nameList.get(infor).getName(),"23333333333333的，奥");
+                // 上传图片
+                imageUpload();
+            }
+        }.execute(null, null, null);
+    }
+
+    public void imageUpload() {
+        String url = "http://47.102.119.140:8080/mobile_inspection_war/uploadSignature.jsp";
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.post(url, params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+           //     Toast.makeText(getActivity(), "upload success", Toast.LENGTH_LONG).show();
+                Log.d("upload success","上传成功");
+            }
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                if (statusCode == 404) {
+                    Log.d("上传失败","就是这样");
+                    Toast.makeText(getActivity(), "Requested resource not found", Toast.LENGTH_LONG).show();
+                }
+                // 当 Http 响应码'500'
+                else if (statusCode == 500) {
+                    Log.d("出了点小问题","就是这样");
+                    Toast.makeText(getActivity(), "Something went wrong at server end", Toast.LENGTH_LONG).show();
+                }
+                // 当 Http 响应码 404, 500
+                else {
+                    Log.d("233333333333","就是这样");
+                    Toast.makeText(getActivity(), "Error Occured n Most Common Error: n1. Device " +
+                            "not connected to Internetn2. Web App is not deployed in App servern3." +
+                            " App server is not runningn HTTP Status code : " + statusCode, Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+    }
 
 }

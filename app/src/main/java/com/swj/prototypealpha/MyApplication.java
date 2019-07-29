@@ -6,9 +6,13 @@ import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
 import com.swj.prototypealpha.swj.util.Utils;
 
+import java.io.File;
+
 public class MyApplication extends Application
 {
     private static MyApplication appContext;
+    private File file;
+    private String projectName,address;
     private String idcard,name,age,tell,password,workNumber,sex;
     public void PersonInfo(String tell,String name,String password,String idcard,String workNumber,String sex,String age){
         this.name =name;
@@ -19,6 +23,22 @@ public class MyApplication extends Application
         this.tell = tell;
         this.age = age;
 
+    }
+    public void setFile(File file){
+        this.file = file;
+    }
+    public File getFile(){
+        return file;
+    }
+    public void setProject(String projectName,String address){
+        this.projectName = projectName;
+        this.address =address;
+    }
+    public String getProjectName(){
+        return  projectName;
+    }
+    public String getAddress(){
+        return address;
     }
     public String getName()
     {

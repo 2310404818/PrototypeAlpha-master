@@ -20,7 +20,7 @@ import java.util.List;
 public class ImageAdapter extends RecyclerView.Adapter<ImageHodler>{
 
     private Context context;
-    private List<List<Picture>> list;
+    private List<Picture> list;
     private OnItemPictureClickListener listener;
 
     @NonNull
@@ -32,7 +32,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageHodler>{
 
     @Override
     public void onBindViewHolder (@NonNull ImageHodler imageHodler, int position) {
-        imageHodler.bindViewHolder(list.get(0),position);
+        imageHodler.bindViewHolder(list,position);
     }
 
     @Override
@@ -40,15 +40,16 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageHodler>{
         return list==null?0:list.size();
     }
 
-    public ImageAdapter(Context context, List<List<Picture>> list, OnItemPictureClickListener listener) {
+    public ImageAdapter(Context context, List<Picture> list, OnItemPictureClickListener listener) {
         this.list = list;
         this.context = context;
         this.listener = listener;
     }
-
+    /*
     public void removeItem(int position) {
         list.remove(position);
         notifyItemRemoved(position);
         notifyDataSetChanged();
     }
+    */
 }

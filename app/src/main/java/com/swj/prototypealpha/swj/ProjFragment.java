@@ -22,6 +22,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.swj.prototypealpha.MyApplication;
 import com.swj.prototypealpha.R;
 import com.swj.prototypealpha.swj.util.ItemBean;
 import com.swj.prototypealpha.swj.util.OnItemClickListener;
@@ -58,9 +59,10 @@ public class ProjFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initUI();
+        MyApplication myApplication = (MyApplication) getActivity().getApplication();
+        String ProjectName = myApplication.getProjectName();
+        String Address = myApplication.getAddress();
 
-        String ProjectName = (String) getArguments().get("ProjectName");
-        String Address = (String) getArguments().get("Address");
         ProjectRequest(ProjectName,Address);
 
     }
@@ -86,9 +88,9 @@ public class ProjFragment extends Fragment {
                     public void onResponse(String response) {
                         try {
                             itemList.clear();
-                            Log.i("返回参数",response);
+                      //      Log.i("返回参数",response);
                             JSONObject jsonObject =  new JSONObject(response);  //获取参数
-                            Log.i("返回参数", String.valueOf(jsonObject));
+                       //     Log.i("返回参数", String.valueOf(jsonObject));
                             String ProjectName =jsonObject.getString("projectName");
                             String Address = jsonObject.getString("address");
                             String UnitConstruction = jsonObject.getString("unitConstruction");

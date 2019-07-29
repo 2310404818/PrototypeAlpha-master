@@ -2,13 +2,14 @@ package com.swj.prototypealpha.activity;
 
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,6 +22,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.swj.prototypealpha.MyApplication;
 import com.swj.prototypealpha.R;
 import com.swj.prototypealpha.swj.ChargePerson;
 import com.swj.prototypealpha.swj.Picture;
@@ -35,7 +37,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * 手写签名界面
@@ -50,19 +51,19 @@ public class ChooseCheckPerson extends AppCompatActivity implements View.OnClick
     RecyclerView recv_photo;
     android.support.v7.widget.Toolbar tlb_mycheck;
     public static int flag=0;
-    public static ChargePerson[] name = new ChargePerson[6];
+    private String person;
     String[] mItems;
     String path;
-    int number;
-    public  static  Picture[]     picture = new Picture[6];
+    String _path;
+    String sign_dir;
     public Picture  mypicture;
     public ChargePerson myname;
     private static  List<ChargePerson> nameList = new ArrayList<>();
     public static   List<Picture> signList    = new ArrayList<>();
-
-
     private ArrayAdapter<String> adapter;
     public static SignAdapter signadapter;
+    MyApplication myApplication;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,20 +71,17 @@ public class ChooseCheckPerson extends AppCompatActivity implements View.OnClick
         if (checkSelfPermission( Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},1);
         }
-        number =0;
-        flag=0;
         setContentView(R.layout.activity_choose_check_person);
         mItems = getResources().getStringArray(R.array.datalist);
         initView();
         initUI();
+        initML();
         String string = "建设单位负责人";
+        person  = string;
         myname =new ChargePerson(string);
-        name[number] = myname;
-
         tx_complete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-             Log.d(String.valueOf(flag),"dddddddddddddddddddddddddddddddddddddddddddddddddddddddd");
                 Intent intent =new Intent();
                 ChooseCheckPerson.this.setResult(110,intent);
                 flag=nameList.size();
@@ -96,18 +94,25 @@ public class ChooseCheckPerson extends AppCompatActivity implements View.OnClick
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
                     String str = (String) sp_name.getItemAtPosition(position);
+                    person = str;
                     myname= new ChargePerson(str);
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
                 String str = "建设单位负责人";
+                person =str;
                 myname= new ChargePerson(str);
-                name[number] = myname;
             }
         });
+        initAutograph();
+        signadapter.setOnItemClickListener(new SignAdapter.OnItemClickListener() {
+            @Override
+            public void onClick(int position) {
+                DialogFor(position);
 
+            }
+        });
 
     }
 
@@ -144,6 +149,75 @@ public class ChooseCheckPerson extends AppCompatActivity implements View.OnClick
         mSignView.clear();
 
     }
+    /**
+     * 获取对应目录下的文件
+     */
+    private void initAutograph(){
+        nameList.clear();
+        signList.clear();
+        myApplication = (MyApplication) getApplication();
+        File dir1 = new File(myApplication.getFile(),myApplication.getProjectName()+"autograph");
+        Date date = new Date(System.currentTimeMillis());
+        SimpleDateFormat date1 = new SimpleDateFormat("yyyy-MM-dd");
+        String datenow = date1.format(date);
+        if (!dir1.exists()){
+            dir1.mkdir();
+        }
+        File dir = new File(dir1,datenow);
+        if (!dir.exists()){
+            dir.mkdir();
+        }
+        String name = dir.getName();
+        File dir11 = new File(dir1,name);
+        File[] files = dir11.listFiles();
+        if (files!=null){
+            for (File file : files) {
+                String nameForMe = file.getName();
+                ChargePerson myNameFor = new ChargePerson(nameForMe);
+                nameList.add(myNameFor);
+                Picture picture = new Picture(BitmapFactory.decodeFile(file.getAbsolutePath()));
+                signList.add(picture);
+            }
+        }
+    }
+
+    /**
+     * 删除功能实现
+     * 内存和界面上
+     * 弹出框
+     */
+    public void DialogFor(final int position){
+        AlertDialog alertDialog = new AlertDialog.Builder(this)
+                .setTitle("确定发起签名？")
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Picture picture = signList.get(position);
+                        Log.d(String.valueOf(picture.getImageID()),"几家大");
+                        ChargePerson chargePerson =nameList.get(position);
+                        String name = chargePerson.getName();
+                        Log.d(name,"较低矮");
+                        File file = new File(_path,name);
+                        Log.d(_path,"几家大");
+                        Log.d(String.valueOf(file),"口大家");
+                        file.delete();
+                        nameList.remove(position);
+                        signList.remove(position);
+                        signadapter.notifyDataSetChanged();
+
+                    }
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                })
+                .create();
+        alertDialog.show();
+    }
+
+
 
     /**
      * 保存签名图片并展示
@@ -152,50 +226,64 @@ public class ChooseCheckPerson extends AppCompatActivity implements View.OnClick
 
         //  保存签名图片
         Bitmap imageBitmap = mSignView.getCachebBitmap();
-
+        BitmapFactory.Options options=new BitmapFactory.Options();
+        options.inSampleSize=3;//直接设置它的压缩率，表示1/2
         path = saveFile(imageBitmap);
-        mypicture  = new Picture(BitmapFactory.decodeFile(path));
-        picture[number] = mypicture;
-        name[number] = myname;
+        Bitmap bitmap = null;
+        try {
+            bitmap = BitmapFactory.decodeFile(path,options);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        mypicture  = new Picture(bitmap);
         if (!TextUtils.isEmpty(path) ) {
-            Log.d(String.valueOf(myname),"就是这个，你看着办吧");
             signList.add(mypicture);
             nameList.add(myname);
             int len = signList.size();
             signadapter.notifyItemChanged(len - 1);
             signadapter.notifyItemChanged(0, len);
-            number++;
-
         }
         clearClick();
     }
 
+    /**
+     * 目录建造
+     */
+    public void initML(){
+        myApplication = (MyApplication) getApplication();
+        Date date = new Date(System.currentTimeMillis());
+        SimpleDateFormat date1 = new SimpleDateFormat("yyyy-MM-dd");
+        String datenow = date1.format(date);
+        File file1 = new File(myApplication.getFile(),myApplication.getProjectName()+"autograph");
+        if (!file1.exists()){
+            file1.mkdirs();
+        }
+        File file = new File(file1,datenow);
+        if (!file.exists())
+            file.mkdirs();
+        sign_dir = file.getAbsolutePath();
+        _path = sign_dir;
+    }
     /**
      * 创建手写签名文件
      *
      * @return 照片地址
      */
     private String saveFile(Bitmap bitmap) {
-
-
         ByteArrayOutputStream baos = null;
-        String _path = null;
+        _path = null;
+        String myPath = null;
         try {
-            String sign_dir = Environment.getExternalStorageDirectory() + "/WttSingDemo/";
-            File file = new File(sign_dir);
-            if (!file.exists())
-                file.mkdirs();
-
-            String name = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.CHINA).format(new Date());
-
-            _path = sign_dir + "IMG_" + name + ".jpg";
+            initML();
+            String picName = person+".jpg";
+            File afile = new File(_path,picName);
+            myPath = afile.getAbsolutePath();
             baos = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
             byte[] photoBytes = baos.toByteArray();
             if (photoBytes != null) {
-                new FileOutputStream(new File(_path)).write(photoBytes);
+                new FileOutputStream(new File(_path,picName)).write(photoBytes);
             }
-
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -206,7 +294,7 @@ public class ChooseCheckPerson extends AppCompatActivity implements View.OnClick
                 e.printStackTrace();
             }
         }
-        return _path;
+        return myPath;
     }
 
     /**
@@ -222,9 +310,7 @@ public class ChooseCheckPerson extends AppCompatActivity implements View.OnClick
             case R.id.btn_sure:
                 sureClick();
                 break;
-
         }
-
     }
     private void initUI()
     {
@@ -233,11 +319,7 @@ public class ChooseCheckPerson extends AppCompatActivity implements View.OnClick
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
     }
-
-
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item)

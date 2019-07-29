@@ -22,14 +22,10 @@ import java.util.List;
  * 照片和负责人名称
  */
 public class SignAdapter extends RecyclerView.Adapter<SignAdapter.ViewHolder> {
-
-  //  String TAG = "SignAdapter";
-
     private Context context;
-
     private List<Picture> signs;
     private List<ChargePerson> names;
-
+    private OnItemClickListener listener;
     public SignAdapter(List<Picture> pictureList,List<ChargePerson> nameList)
     {
         this.signs = pictureList;
@@ -56,8 +52,9 @@ public class SignAdapter extends RecyclerView.Adapter<SignAdapter.ViewHolder> {
         viewHolder.imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                removeItem(i);
-
+                if (listener != null){
+                    listener.onClick(i);
+                }
             }
         });
     }
@@ -95,6 +92,7 @@ public class SignAdapter extends RecyclerView.Adapter<SignAdapter.ViewHolder> {
                 names.remove(pos);
                 notifyItemRemoved(position);
                 notifyDataSetChanged();
+
             }
         });
         dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -104,6 +102,11 @@ public class SignAdapter extends RecyclerView.Adapter<SignAdapter.ViewHolder> {
             }
         });
         dialog.show();
-
+    }
+    public interface OnItemClickListener{
+        void onClick(int position);
+    }
+    public void setOnItemClickListener(OnItemClickListener listener){
+        this.listener = listener;
     }
 }

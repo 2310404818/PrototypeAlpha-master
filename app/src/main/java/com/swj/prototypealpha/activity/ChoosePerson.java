@@ -74,10 +74,6 @@ public class ChoosePerson extends AppCompatActivity {
         myJsonArray();
         initViews();
         initUI();
-
-
-
-
     }
     private void initUI()
     {
@@ -110,7 +106,6 @@ public class ChoosePerson extends AppCompatActivity {
 
         //根据输入框输入值的改变来过滤搜索
         mClearEditText.addTextChangedListener(new TextWatcher() {
-
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 //当输入框里面的值为空，更新为原来的列表，否则为过滤数据列表
@@ -131,10 +126,7 @@ public class ChoosePerson extends AppCompatActivity {
 
     }
     private void initViews() {
-
-
         mSideBar = (WaveSideBar) findViewById(R.id.sideBar);
-
         //设置右侧SideBar触摸监听
         mSideBar.setOnTouchLetterChangeListener(new WaveSideBar.OnTouchLetterChangeListener() {
             @Override
@@ -158,7 +150,6 @@ public class ChoosePerson extends AppCompatActivity {
      */
     private List<SortModel> filledData(List<String> date) {
         List<SortModel> mSortList = new ArrayList<>();
-
         for (int i = 0; i < date.size(); i++) {
             SortModel sortModel = new SortModel();
             sortModel.setName(date.get(i));
@@ -172,7 +163,6 @@ public class ChoosePerson extends AppCompatActivity {
             } else {
                 sortModel.setLetters("#");
             }
-
             mSortList.add(sortModel);
         }
         return mSortList;
@@ -186,7 +176,6 @@ public class ChoosePerson extends AppCompatActivity {
      */
     private void filterData(String filterStr) {
         List<SortModel> filterDateList = new ArrayList<>();
-
             if (TextUtils.isEmpty(filterStr)) {
             filterDateList = filledData(mDate);
         } else {
@@ -227,7 +216,6 @@ public class ChoosePerson extends AppCompatActivity {
 
     public void myJsonArray(){
         final List<String> myData =new ArrayList<>();
-//       mDateList.clear();
         RequestQueue requestQueue =Volley.newRequestQueue(getApplicationContext());
         myApplication = (MyApplication) getApplication();
         String name = myApplication.getTell();
@@ -255,8 +243,6 @@ public class ChoosePerson extends AppCompatActivity {
             }
         });
         requestQueue.add(jsonArrayRequest);
-
-
     }
 
 }

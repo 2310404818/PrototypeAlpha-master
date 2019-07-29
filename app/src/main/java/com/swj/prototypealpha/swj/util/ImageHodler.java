@@ -1,7 +1,6 @@
 package com.swj.prototypealpha.swj.util;
 
 import android.support.annotation.NonNull;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
@@ -19,14 +18,12 @@ import java.util.List;
  * </pre>
  */
 public class ImageHodler extends RecyclerView.ViewHolder {
-    public  CardView                   cardView;
     private NineGridLayout             nineGridLayout;
     private OnItemPictureClickListener listener;
 
     public ImageHodler (@NonNull View itemView, OnItemPictureClickListener listener) {
         super(itemView);
         initView(itemView);
-        cardView = (CardView)itemView;
         this.listener = listener;
     }
 

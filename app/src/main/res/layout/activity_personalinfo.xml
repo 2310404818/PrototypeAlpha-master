@@ -18,12 +18,10 @@
         <LinearLayout style="@style/wrap_layout" >
             <!-- 上圆角-->
             <LinearLayout style="@style/top_layout">
-
                 <TextView
                     style="@style/usertext"
                     android:layout_width="10dp"
                     android:text="手机号" />
-
                 <TextView
                     android:id="@+id/person_phone"
                     style="@style/usertext"

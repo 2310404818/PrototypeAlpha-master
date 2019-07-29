@@ -1,16 +1,16 @@
 package com.swj.prototypealpha.swj;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.swj.prototypealpha.MyApplication;
 import com.swj.prototypealpha.R;
@@ -33,29 +33,18 @@ public class CheckPerson extends AppCompatActivity implements OnItemClickListene
 {
 
     private Toolbar tlb_checkPerson;
-
     private RecyclerView recvv_checkPerson;
     private String title,address;
     private ItemAdapter adapter;
-
     private List<ItemBean> itemList = new ArrayList<>();
-
-    private List<String> personList = new ArrayList<>();
-
-    private FloatingActionButton btn_addPerson;
-
     private  ItemBean item4;
-
- //   private boolean flag=false;
-
+    MyApplication myApplication;
+    private String myName;
 
     private void initUI()
     {
         recvv_checkPerson = findViewById(R.id.recv_addperson);
         tlb_checkPerson = findViewById(R.id.tlb_checklocperson);
-        btn_addPerson = findViewById(R.id.lfbtn_add_person);
-
-
         /**
          * 加载toolbat控件
          * 设置toolbar标题不显示
@@ -67,14 +56,37 @@ public class CheckPerson extends AppCompatActivity implements OnItemClickListene
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     }
+    public void DialogFor(){
+        AlertDialog alertDialog = new AlertDialog.Builder(this)
+                .setTitle("确定发起检查？")
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent2 = new Intent(CheckPerson.this,StartActivity.class);
+                        intent2.putExtra("title",title);
+                        intent2.putExtra("address",address);
+                        startActivity(intent2);
+                    }
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
 
+                    }
+                })
+                .create();
+        alertDialog.show();
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_check_person);
         Intent intent =getIntent();
-        title = intent.getStringExtra("title");
-        address = intent.getStringExtra("address");
+        String title1 = intent.getStringExtra("title");
+        String address1 = intent.getStringExtra("address");
+        myApplication= (MyApplication) getApplication();
+        myApplication.setProject(title1,address1);
+         myName = myApplication.getName();
         initUI();
         /**
          * 加载recyclerView控件的工具类LinearLayoutManager
@@ -88,14 +100,6 @@ public class CheckPerson extends AppCompatActivity implements OnItemClickListene
         recvv_checkPerson.setAdapter(adapter);
         adapter.setItemClickListener(this);
         Update();
-        btn_addPerson.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(CheckPerson.this,StartActivity.class);
-                startActivity(intent);
-            }
-        });
-
     }
 
     private void Update()
@@ -121,11 +125,9 @@ public class CheckPerson extends AppCompatActivity implements OnItemClickListene
         itemList.add(item3);
         adapter.notifyItemChanged(2);
         MyApplication myApplication = (MyApplication) getApplication();
-        String myName = myApplication.getName();
         item4 = new ItemBean("检查人",myName,startingtime,addPerson);
         itemList.add(item4);
         adapter.notifyItemChanged(3);
-
         adapter.notifyItemChanged(0,itemList.size());
     }
 
@@ -134,9 +136,6 @@ public class CheckPerson extends AppCompatActivity implements OnItemClickListene
       switch (position){
           case 0:
               Intent intent = new Intent(CheckPerson.this,ProjectInfoActivity.class);
-              intent.putExtra("title", title);
-              intent.putExtra("address",address);
-              intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
               startActivity(intent);
               break;
           case 1:
@@ -144,14 +143,10 @@ public class CheckPerson extends AppCompatActivity implements OnItemClickListene
               startActivity(intent1);
               break;
           case 2:
-              Intent intent2 = new Intent(CheckPerson.this,StartActivity.class);
-              intent2.putExtra("title",title);
-              intent2.putExtra("address",address);
-              startActivity(intent2);
+              DialogFor();
               break;
           case 3:
               Intent intent3 = new Intent(CheckPerson.this,ChoosePerson.class);
-        //      intent3.putExtra("")
               startActivityForResult(intent3,222);
               break;
       }
@@ -175,18 +170,17 @@ public class CheckPerson extends AppCompatActivity implements OnItemClickListene
         }
         return super.onOptionsItemSelected(item);
     }
+
     @Override
     protected void onActivityResult(int requestCode,int resultCode,Intent data){
         super.onActivityResult(requestCode,resultCode,data);
-        MyApplication myApplication = (MyApplication) getApplication();
-        String myName = myApplication.getName();
         if (requestCode==222&&resultCode==111){
             String name =data.getStringExtra("name");
-       //     Log.d(name,"大大实打实大苏打");
             Bitmap addPerson = BitmapFactory.decodeResource(getResources(),R.mipmap.check_add);
             Bitmap startingtime = BitmapFactory.decodeResource(getResources(),R.mipmap.startingtime);
             itemList.remove(item4);
-            item4 = new ItemBean("检查人",myName+name,startingtime,addPerson);
+            item4 = new ItemBean("检查人",myName+" "+name,startingtime,addPerson);
+            myName = myName+" "+name;
             itemList.add(item4);
             adapter.notifyDataSetChanged();
 
