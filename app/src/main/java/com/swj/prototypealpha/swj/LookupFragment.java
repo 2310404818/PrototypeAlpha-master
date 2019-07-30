@@ -46,6 +46,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -66,7 +67,6 @@ public class LookupFragment extends Fragment {
     private     TextView             text_look_foundation;
     private     TextView             text_look_rocord;
     private     TextView             text_checkpeople;
-    private     TextView             text_writepeople;
     private     TextView             text_donepeople;
     private     Button               button;
     private     Button               button_complete;
@@ -82,6 +82,8 @@ public class LookupFragment extends Fragment {
     private     static   List<ChargePerson> nameList = new ArrayList<>();
     public      static   List<Picture> signList    = new ArrayList<>();
     MyApplication myApplication;
+    private String datenow;
+    Timer timer = new Timer();
 
     @Override
     public View onCreateView (LayoutInflater inflater, ViewGroup container,
@@ -119,6 +121,12 @@ public class LookupFragment extends Fragment {
         }
     }
 
+    public void onHiddenChanged(boolean hidden) {
+        if (hidden){
+            ProjectRequest(ProjectName,Address,datenow);
+        }
+        super.onHiddenChanged(hidden);
+    }
 
     /**
      * 点击发起签名弹出框
@@ -188,7 +196,6 @@ public class LookupFragment extends Fragment {
         text_look_time.setText(sdf.format(newTime));
         text_look_proj = getActivity().findViewById(R.id.text_projchenck);
         text_checkpeople = getActivity().findViewById(R.id.text_checkpeople);
-        text_writepeople = getActivity().findViewById(R.id.text_writepeople);
         text_donepeople = getActivity().findViewById(R.id.text_donepeople);
         button = getActivity().findViewById(R.id.button);
         button_complete=getActivity().findViewById(R.id.button2);
@@ -219,7 +226,7 @@ public class LookupFragment extends Fragment {
         Address = myApplication.getAddress();
         Date date = new Date(System.currentTimeMillis());
         SimpleDateFormat date1 = new SimpleDateFormat("yyyy-MM-dd");
-        String datenow = date1.format(date);
+         datenow = date1.format(date);
         File dir1 = new File(myApplication.getFile(),myApplication.getProjectName()+"autograph");
         if (!dir1.exists()){
             dir1.mkdir();
@@ -228,7 +235,7 @@ public class LookupFragment extends Fragment {
         if (!dir.exists()){
             dir.mkdir();
         }
-        ProjectRequest(ProjectName,Address);
+        ProjectRequest(ProjectName,Address,datenow);
         initUI();
         initAutograph();
 
@@ -243,11 +250,11 @@ public class LookupFragment extends Fragment {
 
 
     /**
-     * 拉取项目详细信息
+     * 拉取信息
      */
-    public void ProjectRequest(final String name, final String address) {
+    public void ProjectRequest(final String name, final String address,final String date) {
         //请求地址
-        String url = "http://47.102.119.140:8080/mobile_inspection_war/ProjectDetail ";    //注①
+        String url = "http://47.102.119.140:8080/mobile_inspection_war/Review";    //注①
         String tag = "ProjectInfo";    //注②
 
         //取得请求队列
@@ -264,21 +271,21 @@ public class LookupFragment extends Fragment {
                         try {
                             JSONObject jsonObject =  new JSONObject(response);  //获取参数
                          //   Log.i("返回参数", String.valueOf(jsonObject));
-                            String ProjectName =jsonObject.getString("projectName");
-                            String Address = jsonObject.getString("address");
-                            String UnitConstruction = jsonObject.getString("unitConstruction");
-                            String SupervisionUnion =jsonObject.getString("supervisionUnion");
-                            String Contractors =jsonObject.getString("contractors");
+                            String UnitConstruction = jsonObject.getString("UnitConstruction");
+                            String SupervisionUnion =jsonObject.getString("SupervisionUnion");
+                            String Contractors =jsonObject.getString("Contractors");
+                            String checkpPeople = jsonObject.getString("rummager");
+                            String situation = jsonObject.getString("Situation");
+                            String MeasuresAndRequirements = jsonObject.getString("MeasuresAndRequirements");
                             myApplication= (MyApplication) getActivity().getApplication();
                             text_bulid.setText(UnitConstruction);
                             text_check.setText(SupervisionUnion);
                             text_look_addr.setText(Address);
                             text_look_proj.setText(ProjectName);
-                            text_checkpeople.setText(myApplication.getName());
-                            text_writepeople.setText("李四");
+                            text_checkpeople.setText(checkpPeople);
                             text_donepeople.setText(Contractors);
-
-
+                            text_look_foundation.setText(situation);
+                            text_look_rocord.setText(MeasuresAndRequirements);
                         } catch (JSONException e) {
                             //做自己的请求异常操作，如Toast提示（“无网络连接”等）
                             Toast.makeText(getActivity(),"网络异常",Toast.LENGTH_SHORT).show();
@@ -297,8 +304,9 @@ public class LookupFragment extends Fragment {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
-                params.put("projectName", name);  //注⑥
+                params.put("checkProject", name);  //注⑥
                 params.put("address", address);
+                params.put("checkTime",date);
 
                 return params;
             }

@@ -21,7 +21,7 @@
         android:id="@+id/text_re_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="注册页面"
+        android:text="激活页面"
         android:textColor="@android:color/white"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="@+id/text_re_back"
@@ -35,7 +35,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -45,6 +45,7 @@
             android:id="@+id/myphone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            style="@style/usertext"
             android:hint="手机号码" />
     </android.support.design.widget.TextInputLayout>
 
@@ -61,6 +62,7 @@
 
         <android.support.design.widget.TextInputEditText
             android:id="@+id/mycode"
+            style="@style/usertext"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="手机验证码" />
@@ -68,18 +70,20 @@
 
     <Button
         android:id="@+id/btn_getcode"
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginRight="8dp"
+        style="@style/usertext"
+        android:layout_width="132dp"
+        android:layout_height="39dp"
         android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_weight="1"
+
         android:background="@drawable/btn_bg"
         android:text="获取验证码"
-        android:textColor="@android:color/white"
+        android:textColor="@color/color_white"
         android:textSize="18sp"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toRightOf="@+id/text_re_code"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/text_re_phone" />//注意这里button的设置，同一行前面设定大小，后面用比例来设可以自适应
 
 
@@ -96,6 +100,7 @@
 
         <android.support.design.widget.TextInputEditText
             android:id="@+id/mypassword"
+            style="@style/usertext"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="密码"
@@ -113,11 +118,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <android.support.design.widget.TextInputEditText
-            android:id="@+id/myname"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="名称"/>
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -131,11 +131,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <android.support.design.widget.TextInputEditText
-            android:id="@+id/myage"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="年龄" />
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -149,11 +144,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <android.support.design.widget.TextInputEditText
-            android:id="@+id/mysex"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="性别"/>
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -167,11 +157,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <android.support.design.widget.TextInputEditText
-            android:id="@+id/myidcard"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="身份证"/>
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -185,11 +170,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <android.support.design.widget.TextInputEditText
-            android:id="@+id/myjobcode"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="职务" />
     </android.support.design.widget.TextInputLayout>
 
     <Button
@@ -201,7 +181,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/btn_bg"
-        android:text="注册"
+        android:text="激活"
         android:textColor="@android:color/white"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"

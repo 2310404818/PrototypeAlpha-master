@@ -7,6 +7,7 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
 
@@ -107,6 +108,7 @@ public class StartActivity extends AppCompatActivity {
         Intent intent =getIntent();
         ProjectName = intent.getStringExtra("title");
         address =intent.getStringExtra("address");
+        Log.d(ProjectName+"  "+address,"i邓家佳ij");
         initUI();
         setToolBar();
     }
@@ -128,7 +130,12 @@ public class StartActivity extends AppCompatActivity {
     {
         if(item.getItemId() == android.R.id.home)
         {
-            finish();
+            Intent intent = new Intent(this,CheckPerson.class);
+            intent.putExtra("title", ProjectName);
+            intent.putExtra("address",address);
+            Log.d(ProjectName+"  "+address,"记得佳佳i");
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
             return true;
         }
         return super.onOptionsItemSelected(item);

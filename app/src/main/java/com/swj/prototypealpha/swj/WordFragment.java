@@ -1,43 +1,47 @@
 package com.swj.prototypealpha.swj;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.media.MediaRecorder;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
 import android.text.InputType;
-import android.util.Base64;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Chronometer;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.loopj.android.http.RequestParams;
 import com.swj.prototypealpha.MyApplication;
 import com.swj.prototypealpha.R;
+import com.swj.prototypealpha.oyjz.RecordAudioDialogFragment;
 import com.swj.prototypealpha.oyjz.ShowRecordActivity;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import cz.msebera.android.httpclient.Header;
-import kr.co.namee.permissiongen.PermissionGen;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 笔录界面
@@ -53,13 +57,16 @@ public class WordFragment extends Fragment {
     private MediaRecorder mr = null;
     public static TextView text_word_foundation;
     public static TextView text_word_record;
-    public static String word_foundation;
-    public static String word_question;
     private RequestParams params = new RequestParams();
     private String encodedString;
+    private String datenow;
     private File soundFile;
     private String ProjectName,Address;
     private File dir;
+    private String edit_foindation="现场情况符合要求";
+    private String edit_question="要求";
+    private String edit_type="检查类型";
+    private Chronometer mChronometerTime;
     EditText edit_word_foundation;
     EditText edit_word_question;
     EditText editText;
@@ -67,25 +74,32 @@ public class WordFragment extends Fragment {
     LinearLayout linearLayout;
     MyApplication myApplication;
 
+
+
     @SuppressLint("RestrictedApi")
     private void initUI()
     {
         linearLayout = getActivity().findViewById(R.id.linearLayout_focus);
         text_word_foundation = getActivity().findViewById(R.id.word_foundation_lable);
         text_word_record = getActivity().findViewById(R.id.word_question_record_lable);
-
+        //现场情况
         edit_word_foundation = getActivity().findViewById(R.id.word_doundation_edit);
-        edit_word_foundation.setText("现场情况符合要求");
         edit_word_foundation.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE);
         edit_word_foundation.setGravity(Gravity.TOP);
         edit_word_foundation.setSingleLine(false);
         edit_word_foundation.setHorizontallyScrolling(false);
-
-        edit_word_question = getActivity().findViewById(R.id.word_question_record_edit);
-        edit_word_question.setText("要求1：XXXXXXXXXXXXXXXXXXXX"+
-                "要求2：XXXXXXXXXXXXXXXXX");
+        //执法类型
         editText = getActivity().findViewById(R.id.editText);
-        editText.setText("跟踪检查");
+        editText.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+        editText.setGravity(Gravity.TOP);
+        editText.setSingleLine(false);
+        editText.setHorizontallyScrolling(false);
+        //执法措施和要求
+        edit_word_question = getActivity().findViewById(R.id.word_question_record_edit);
+
+        edit_word_foundation.setHint("现场情况符合要求");
+        edit_word_question.setHint("要求");
+        editText.setHint("检查类型");
         edit_word_question.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE);
         //文本显示的位置在EditText的最上方
         edit_word_question.setGravity(Gravity.TOP);
@@ -93,10 +107,6 @@ public class WordFragment extends Fragment {
         edit_word_question.setSingleLine(false);
         //水平滚动设置为False
         edit_word_question.setHorizontallyScrolling(false);
-
-
-
-
     }
 
     @Override
@@ -112,12 +122,11 @@ public class WordFragment extends Fragment {
         }
         Date date = new Date(System.currentTimeMillis());
         SimpleDateFormat date1 = new SimpleDateFormat("yyyy-MM-dd");
-        String datenow = date1.format(date);
+        datenow = date1.format(date);
         dir = new File(dir1,datenow);
-        if (!dir.exists()){
+        if (!dir.exists()) {
             dir.mkdirs();
         }
-        request();
         btn_record = (Button) getView().findViewById(R.id.btn_record);
         btn_record.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,165 +139,227 @@ public class WordFragment extends Fragment {
         btn_control.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!isStart){
-                    startRecord();
-                    btn_control.setText("停止录制");
-                    isStart = true;
-                }else{
-                    stopRecord();
-                    btn_control.setText("开始录制");
-                    isStart = false;
-                }
+                startRecord();
+            }
+        });
+
+        edit_word_foundation.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                edit_foindation = s.toString();
+            }
+        });
+
+        edit_word_question.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                edit_question = s.toString();
+            }
+        });
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                edit_type = s.toString();
+            }
+        });
+        setTextNow(ProjectName,Address,datenow);
+    }
+
+    /**
+     * 判断是否离开了当前fragment
+     */
+    @Override
+    public void onHiddenChanged(boolean hidden){
+        super.onHiddenChanged(hidden);
+        if (hidden){
+
+        }
+        else {
+            myApplication = (MyApplication) getActivity().getApplication();
+            Date date = new Date(System.currentTimeMillis());
+            SimpleDateFormat date1 = new SimpleDateFormat("yyyy-MM-dd");
+            String date2 = date1.format(date);
+            if (edit_foindation.equals("现场情况符合要求") && edit_question.equals("要求") && edit_type.equals("检查类型"))
+            {
+
+            }
+            else {
+                edit_word_foundation.setText(edit_foindation);
+                edit_word_question.setText(edit_question);
+                editText.setText(edit_type);
+                WordFragmentRequest(myApplication.getProjectName(),myApplication.getAddress(),date2,edit_type,edit_foindation,edit_question);
+            }
+
+        }
+    }
+
+    //开始录制
+    private void startRecord(){
+
+        final RecordAudioDialogFragment fragment = RecordAudioDialogFragment.newInstance();
+        fragment.show(getFragmentManager(),RecordAudioDialogFragment.class.getSimpleName());
+        fragment.setOnCancelListener(new RecordAudioDialogFragment.OnAudioCancelListener() {
+            @Override
+            public void onCancel() {
+                fragment.dismiss();
             }
         });
     }
 
 
-    //开始录制
-    private void startRecord(){
-        myApplication = (MyApplication) getActivity().getApplication();
-      //  dir = new File(myApplication.getFile(),myApplication.getProjectName());
-        if(mr == null){
-            if(!dir.exists()){
-                dir.mkdirs();
-            }
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy年MM月dd日  HH.mm.ss");
-            SimpleDateFormat myDate = new SimpleDateFormat("yyyy年MM月dd日");
-            SimpleDateFormat myTime = new SimpleDateFormat("HH.mm.ss");
-            Date curDate = new Date(System.currentTimeMillis());
-            str = formatter.format(curDate);
-            date = myDate.format(curDate);
-            time = myTime.format(curDate);
-            soundFile = new File(dir,str+".amr");
-            if(!soundFile.exists()){
-                try {
-                    soundFile.createNewFile();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-            }
-            mr = new MediaRecorder();
-            mr.setAudioSource(MediaRecorder.AudioSource.MIC);  //音频输入源
-            mr.setOutputFormat(MediaRecorder.OutputFormat.AMR_WB);   //设置输出格式
-            mr.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_WB);   //设置编码格式
-            mr.setOutputFile(soundFile.getAbsolutePath());
-            try {
-                mr.prepare();
-                mr.start();  //开始录制
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-        }
-    }
-
-    //停止录制，资源释放
-    private void stopRecord(){
-        if(mr != null){
-            mr.stop();
-            mr.release();
-            mr = null;
-            uploadVoice();
-        }
-    }
-
-    private void request() {
-        PermissionGen.with(this)
-                .addRequestCode(100)
-                .permissions(Manifest.permission.RECORD_AUDIO
-                        , Manifest.permission.WRITE_EXTERNAL_STORAGE
-                        , Manifest.permission.WAKE_LOCK
-                        , Manifest.permission.READ_EXTERNAL_STORAGE)
-                .request();
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_word, container, false);
     }
-    //上传录音
-    public void uploadVoice() {
-      //  String file =null;
-        if (soundFile!=null) {
-                encodeImagetoString();
 
-        } else {
-            Toast.makeText(getActivity(), "没有指定录音文件或文件为空",
-                    Toast.LENGTH_LONG).show();
-        }
+    /**
+     * 上传edittext实时监控
+     */
+    public  void WordFragmentRequest(final String projectName, final String address, final String date, final String Type,final String result,final String require) {
+        //请求地址
+        String url = "http://47.102.119.140:8080/mobile_inspection_war/NoteUpload";
+        String tag = "WordFragment";
+        //取得请求队列
+        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
+        //防止重复请求，所以先取消tag标识的请求队列
+        requestQueue.cancelAll(tag);
+        //创建StringRequest，定义字符串请求的请求方式为POST(省略第一个参数会默认为GET方式)
+        final StringRequest request = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonObject = (JSONObject) new JSONObject(response).get("params");  //获取参数
+                            String result = jsonObject.getString("Result");  //获取请求结果
+                            if (result.equals("success")) {  //如果结果返回为成功
+                                Log.d("笔录","上传成功");
+                            }
+                            else {
+                                //做自己的登录失败操作，如Toast提示
+                                Log.d("笔录","上传失败");
+                            }
+                        } catch (JSONException e) {
+                            //做自己的请求异常操作，如Toast提示（“无网络连接”等）
+                            Toast.makeText(getActivity(),"网络异常",Toast.LENGTH_SHORT).show();
+                            //    Log.e("TAG", e.getMessage(), e);
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //做自己的响应错误操作，如Toast提示（“请稍后重试”等）
+                Log.e("TAG", error.getMessage(), error);
+                error.printStackTrace();
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("projectName", projectName);  //注⑥
+                params.put("address", address);
+                params.put("date",date);
+                params.put("type",Type);
+                params.put("result",result);
+                params.put("require",require);
+                return params;
+            }
+        };
+        //设置Tag标签
+        request.setTag(tag);
+        //将请求添加到队列中
+        requestQueue.add(request);
     }
-    //录音转字符流
-    @SuppressLint("StaticFieldLeak")
-    public void encodeImagetoString() {
-        new AsyncTask<Void, Void, String>() {
+    /**
+     * 拉取笔录
+     */
+    public  void setTextNow(final String checkProject, final String address,final String date) {
+        //请求地址
+        String url = "http://47.102.119.140:8080/mobile_inspection_war/NoteDownload";
+        String tag = "Check";
+        //取得请求队列
+        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
 
-            protected void onPreExecute() {
+        //防止重复请求，所以先取消tag标识的请求队列
+        requestQueue.cancelAll(tag);
 
-            };
+        //创建StringRequest，定义字符串请求的请求方式为POST(省略第一个参数会默认为GET方式)
+        final StringRequest request = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonObject = (JSONObject) new JSONObject(response);  //获取参数
+                            String MeasuresAndRequirements = jsonObject.getString("MeasuresAndRequirements");
+                            String  Situation = jsonObject.getString("Situation");
+                            String CheckType = jsonObject.getString("CheckType");
+                            if (MeasuresAndRequirements.equals("null") && Situation.equals("null") && CheckType.equals("null")){
 
+                            }
+                            else {
+                                edit_word_foundation.setText(Situation);
+                                edit_word_question.setText(MeasuresAndRequirements);
+                                editText.setText(CheckType);
+                            }
+                        } catch (JSONException e) {
+                            //做自己的请求异常操作，如Toast提示（“无网络连接”等）
+                            Toast.makeText(getActivity(),"网络异常",Toast.LENGTH_SHORT).show();
+                            //    Log.e("TAG", e.getMessage(), e);
+                        }
+                    }
+                }, new Response.ErrorListener() {
             @Override
-            protected String doInBackground(Void... params) {
-                File fileVoice = new File(String.valueOf(soundFile));
-                InputStream voiceStream = null;
-                byte[] byte_arr = null;
-                try {
-                    voiceStream = new FileInputStream(fileVoice);
-                    byte_arr = new byte[voiceStream.available()];
-                    encodedString = Base64.encodeToString(byte_arr, 0);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                return "";
+            public void onErrorResponse(VolleyError error) {
+                //做自己的响应错误操作，如Toast提示（“请稍后重试”等）
+                Log.e("TAG", error.getMessage(), error);
+                error.printStackTrace();
             }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("projectName",checkProject);
+                params.put("address",address);
+                params.put("date",date);
 
-            @Override
-            protected void onPostExecute(String msg) {
-                // 将转换后的录音添加到上传的参数中
-                params.put("voice", encodedString);
-                params.put("date", date);
-                params.put("time",time);
-                params.put("projectName",ProjectName);
-                params.put("address",Address);
-                // 上传录音
-                iUpload();
+                return params;
             }
-        }.execute(null, null, null);
-    }
-    public void iUpload() {
-        String url = "http://47.102.119.140:8080/mobile_inspection_war/uploadVoice.jsp";
-        AsyncHttpClient client = new AsyncHttpClient();
-        client.post(url, params, new AsyncHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-             //   Toast.makeText(getActivity(), "upload success", Toast.LENGTH_LONG).show();
-                Log.d("成功","低矮降低");
-            }
-            @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] bytes, Throwable throwable) {
-                if (statusCode == 404) {
-                    Toast.makeText(getActivity(),
-                            "Requested resource not found", Toast.LENGTH_LONG).show();
-                }
-                // 当 Http 响应码'500'
-                else if (statusCode == 500) {
-                    Toast.makeText(getActivity(),
-                            "Something went wrong at server end", Toast.LENGTH_LONG).show();
-                }
-                // 当 Http 响应码 404, 500
-                else {
-                    Toast.makeText(
-                            getActivity(), "Error Occured n Most Common Error: n1. Device " +
-                                    "not connected to Internetn2. Web App is not deployed in App servern3." +
-                                    " App server is not runningn HTTP Status code : "
-                                    + statusCode, Toast.LENGTH_LONG).show();
-                }
-            }
-        });
+        };
+        //设置Tag标签
+        request.setTag(tag);
+        //将请求添加到队列中
+        requestQueue.add(request);
     }
 
 }

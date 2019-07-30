@@ -159,4 +159,5 @@
     <string name="title_activity_choose_check_person">ChooseCheckPerson</string>
     <string name="title_activity_choose_person">ChoosePerson</string>
     <string name="title_activity_personalinfo">PersonalinfoActivity</string>
+    <string name="default_file_name">My Recording</string>
 </resources>

@@ -103,14 +103,15 @@ public class MainFragment_R extends Fragment {
      * 圆形头像
      */
     private void initData(){
-
         myApplication = (MyApplication) getActivity().getApplication();
         String name = myApplication.getTell();
             Glide.with(getActivity()).load("http://47.102.119.140:8080/pic/"+name+".jpg")
+                    .error(R.drawable.toux)
                     .bitmapTransform(new BlurTransformation(getActivity(),25,3),new CenterCrop(getActivity()))
                     .into(right_top);
 
             Glide.with(getActivity()).load("http://47.102.119.140:8080/pic/"+name+".jpg")
+                    .error(R.drawable.toux)
                     .bitmapTransform(new CropCircleTransformation(getActivity()))
                     .into(iv_touxiang);
     }
@@ -188,7 +189,6 @@ public class MainFragment_R extends Fragment {
         initUI();
         if (bt!=null)
         {
-        //    Log.d("打打打","大");
             Glide.with(getActivity()).load(path + myApplication.getTell()+".png")
                     .bitmapTransform(new BlurTransformation(getActivity(),25,3),new CenterCrop(getActivity()))
                     .into(right_top);
@@ -480,7 +480,7 @@ public class MainFragment_R extends Fragment {
         client.post(url, params, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                Toast.makeText(getActivity(), "upload success", Toast.LENGTH_LONG).show();
+          //      Toast.makeText(getActivity(), "upload success", Toast.LENGTH_LONG).show();
             }
 
             @Override

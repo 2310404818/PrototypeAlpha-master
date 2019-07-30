@@ -39,7 +39,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private Button btn_get_code;
     private Button btn_register;
     private Toolbar toolbar;
-    private TextInputEditText myphone,mycode,mypassword,myname,myage,mysex,myidcard,myjobcode;
+    private TextInputEditText myphone,mycode,mypassword;
     /**  倒计时 */
     private RegisterActivity.TimeCount m_TimeCount;
 
@@ -58,14 +58,9 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     {
         btn_get_code = findViewById(R.id.btn_getcode);
         btn_register = findViewById(R.id.btn_register);
-        myage =findViewById(R.id.myage);
         mycode =findViewById(R.id.mycode);
-        myidcard =findViewById(R.id.myidcard);
-        myjobcode =findViewById(R.id.myjobcode);
-        myname =findViewById(R.id.myname);
         mypassword =findViewById(R.id.mypassword);
         myphone =findViewById(R.id.myphone);
-        mysex =findViewById(R.id.mysex);
         setToolBar();
     }
 
@@ -99,7 +94,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     JSONObject jsonObject = (JSONObject) new JSONObject(response).get("params");
                     String result = jsonObject.getString("Result");
                     if (result.equals("success")){
-                        Log.d("11111111111111111111111111111111111111","1111111111111111111111111111111");
+
                     }
                     else {
                         Toast.makeText(RegisterActivity.this,"发送失败,请检查手机号",Toast.LENGTH_SHORT).show();
@@ -136,7 +131,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
      * 账号信息发送给服务器
      */
     public  void RegisterRequest(final String accountNumber, final String password,
-                                 final String name, final String age, final String sex, final String idcard, final String jobcode,final String code) {
+                                final String code) {
         //请求地址
         String url = "http://47.102.119.140:8080/mobile_inspection_war/Register";    //注①
         String tag = "Register";    //注②
@@ -153,11 +148,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     @Override
                     public void onResponse(String response) {
                         try {
-                            Log.d(response,"11111111111111111111111111111111111");
                             JSONObject jsonObject = (JSONObject) new JSONObject(response).get("params");  //获取参数
-                            Log.d(response,"22222222222222222222222222222222222");
                             String result = jsonObject.getString("Result");  //获取请求结果
-                            Log.d(result,"33333333333333333333333333333333333333");
                             if (result.equals("success")) {  //如果结果返回为成功
                                 //做自己的登录成功操作，如页面跳转
                                 Toast.makeText(RegisterActivity.this,"注册成功",Toast.LENGTH_SHORT).show();
@@ -169,8 +161,11 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                             else if (result.equals("验证码已过期")){
                                 Toast.makeText(RegisterActivity.this,"验证码已过期",Toast.LENGTH_SHORT).show();
                             }
-                            else if (result.equals("Registered!")){
+                            else if (result.equals("registered!")){
                                 Toast.makeText(RegisterActivity.this,"该号码已注册",Toast.LENGTH_SHORT).show();
+                            }
+                            else if (result.equals("验证码错误")){
+                                Toast.makeText(RegisterActivity.this,"验证码错误",Toast.LENGTH_SHORT).show();
                             }
                             else {
                                 //做自己的登录失败操作，如Toast提示
@@ -195,11 +190,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 Map<String, String> params = new HashMap<>();
                 params.put("tell", accountNumber);  //注⑥
                 params.put("Password", password);
-                params.put("userName",name);
-                params.put("age",age);
-                params.put("gender",sex);
-                params.put("id",idcard);
-                params.put("workNumber",jobcode);
                 params.put("VCode",code);
                 return params;
             }
@@ -280,11 +270,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 String phone = myphone.getText().toString();
                 String code = mycode.getText().toString();
                 String password =mypassword.getText().toString();
-                String name =myname.getText().toString();
-                String age = myage.getText().toString();
-                String sex = mysex.getText().toString();
-                String id = myidcard.getText().toString();
-                String job = myjobcode.getText().toString();
+
                  boolean correctflag =isCorrect(password);
                  boolean phoneflag =   isPhone(phone);
                  if (TextUtils.isEmpty(code)){
@@ -292,7 +278,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                  }
                  else {
                      if (correctflag && phoneflag){
-                         RegisterRequest(phone,password,name,age,sex,id,job,code);
+                         RegisterRequest(phone,password,code);
                      }
                  }
 

@@ -19,6 +19,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.swj.prototypealpha.Enity.RecordingItem;
 import com.swj.prototypealpha.MyApplication;
 import com.swj.prototypealpha.R;
 
@@ -65,6 +66,7 @@ public class ShowRecordActivity extends AppCompatActivity {
         setContentView(R.layout.activity_show_record);
         initRecord();
         setToolbar();
+        isPlaying =false;
         myApplication = (MyApplication) getApplication();
         ProjectName = myApplication.getProjectName();
         Address = myApplication.getAddress();
@@ -74,27 +76,30 @@ public class ShowRecordActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                //弹出进度条的fragment
                 Record record = recordList.get(i);
-                    //暂停的时候
-                    if(!isPlaying){
+                RecordingItem recordingItem = new RecordingItem();
+                //音频文件的地址
+                final String filePath = record.getPath();
+                //音频文件的时长
+                long elpased = 0;
+                try {
+                    File file = new File(record.getPath());
+                    FileInputStream fis = new FileInputStream(file);
                     mPlayer = new MediaPlayer();
-                        try {
-                            File file = new File(record.getPath());
-                            FileInputStream fis = new FileInputStream(file);
-                            mPlayer.setDataSource(fis.getFD());
-                            mPlayer.prepare();
-                            mPlayer.start();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    isPlaying = true;
+                    mPlayer.setDataSource(fis.getFD());
+                    mPlayer.prepare();
+                    elpased =  mPlayer.getDuration();
+                    mPlayer.release();
+                }  catch (IOException e) {
+                    e.printStackTrace();
                 }
-                //播放的时候
-                else{
-                    mPlayer.release();      //结束播放，释放资源就行
-                    mPlayer = null;
-                    isPlaying = false;
-                }
+                //传入参数
+                recordingItem.setFilePath(filePath);
+                recordingItem.setLength((int) elpased);
+                //跳转界面
+                PlaybackDialogFragment fragmentPlay = PlaybackDialogFragment.newInstance(recordingItem);
+                fragmentPlay.show(getSupportFragmentManager(), PlaybackDialogFragment.class.getSimpleName());
             }
         });
         //制定长按菜单界面
@@ -118,7 +123,6 @@ public class ShowRecordActivity extends AppCompatActivity {
             case 1:
                 myApplication = (MyApplication) getApplication();
                 Record save = recordList.get(id);//在recordList中通过id获得对应record对象
-                Log.d("名称为",save.getName());
                 StringTokenizer str = new StringTokenizer(save.getName()," ");
                 String date = str.nextToken();
                 String time1 = (str.nextToken());

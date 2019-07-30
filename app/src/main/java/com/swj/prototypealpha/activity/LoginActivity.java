@@ -137,12 +137,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
         }
         if (hasPermissionDismiss){//如果有没有被允许的权限
-      //      Toast.makeText(this,"有权限未赋予权限，将不能正常使用",Toast.LENGTH_SHORT).show();
-           // showPermissionDialog();
             showWaringDialog();
         }else {
             //权限已经都通过了，可以将程序继续打开了
-         //   init();
+
         }
     }
     /**
