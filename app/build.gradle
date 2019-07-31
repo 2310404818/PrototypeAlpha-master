@@ -60,10 +60,7 @@ dependencies {
 
     implementation 'com.github.venusic:E-signature:0.2'
     implementation 'com.squareup.picasso:picasso:2.5.2'
-    implementation 'com.amap.api:map2d:5.2.0'
-    implementation 'com.amap.api:location:4.5.1'
     //搜索功能
-    implementation 'com.amap.api:search:6.5.0.1'
     implementation 'com.carson_ho:SearchLayout:1.0.1'
     //搜索功能
     implementation files('libs/pinyin4j-2.5.0.jar')

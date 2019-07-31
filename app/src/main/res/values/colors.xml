@@ -3,6 +3,12 @@
     <color name="colorPrimary">#189ED7</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+    <!--signed-->
+    <color name="color_gray6">#666666</color>
+    <color name="color_gray3">#333333</color>
+    <color name="color_gray9">#999999</color>
+    <color name="color_e">#eeeeee</color>
+    <color name="color_black">#000000</color>
 
     <!--RecyclerView -->
     <color name="txt_color">#48495f</color>

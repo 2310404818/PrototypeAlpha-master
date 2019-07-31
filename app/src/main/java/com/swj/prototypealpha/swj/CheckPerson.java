@@ -24,6 +24,7 @@ import com.android.volley.toolbox.Volley;
 import com.swj.prototypealpha.MyApplication;
 import com.swj.prototypealpha.R;
 import com.swj.prototypealpha.activity.ChoosePerson;
+import com.swj.prototypealpha.activity.SignedActivity;
 import com.swj.prototypealpha.swj.util.ItemBean;
 import com.swj.prototypealpha.swj.util.OnItemClickListener;
 import com.swj.prototypealpha.swj.util.RecyclerViewHelper.ItemAdapter;
@@ -124,7 +125,7 @@ public class CheckPerson extends AppCompatActivity implements OnItemClickListene
         Date date = new Date(System.currentTimeMillis());
         SimpleDateFormat date1 = new SimpleDateFormat("yyyy-MM-dd");
         String datenow = date1.format(date);
-        CheckIsEx(myApplication.getProjectName(),myApplication.getAddress(),datenow);
+        CheckIsEx(myApplication.getProjectName(),myApplication.getAddress(),datenow,myName);
     }
 
     private void Update()
@@ -162,7 +163,7 @@ public class CheckPerson extends AppCompatActivity implements OnItemClickListene
               startActivity(intent);
               break;
           case 1:
-              Intent intent1 = new Intent(CheckPerson.this,AddLocActivity.class);
+              Intent intent1 = new Intent(CheckPerson.this,SignedActivity.class);
               startActivity(intent1);
               break;
           case 2:
@@ -221,7 +222,7 @@ public class CheckPerson extends AppCompatActivity implements OnItemClickListene
         SimpleDateFormat date1 = new SimpleDateFormat("yyyy-MM-dd");
         String datenow = date1.format(date);
         myApplication = (MyApplication) getApplication();
-        CheckIsEx(myApplication.getProjectName(),myApplication.getAddress(),datenow);
+        CheckIsEx(myApplication.getProjectName(),myApplication.getAddress(),datenow,myName);
     }
     /**
      * 发起检查，创建执法记录
@@ -296,7 +297,7 @@ public class CheckPerson extends AppCompatActivity implements OnItemClickListene
     /**
      * 判断是否存在已经发起的检查
      */
-    public  void CheckIsEx(final String checkProject, final String address,final String date) {
+    public  void CheckIsEx(final String checkProject, final String address, final String date, final String name) {
         //请求地址
         String url = "http://47.102.119.140:8080/mobile_inspection_war/CheckJudge";
         String tag = "Check";
@@ -353,6 +354,7 @@ public class CheckPerson extends AppCompatActivity implements OnItemClickListene
                 params.put("checkProject",checkProject);
                 params.put("address",address);
                 params.put("checkTime",date);
+                params.put("rummager",name);
 
                 return params;
             }

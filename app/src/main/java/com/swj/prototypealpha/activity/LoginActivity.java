@@ -79,6 +79,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             Manifest.permission.RECORD_AUDIO ,          //录音权限
             Manifest.permission.ACCESS_FINE_LOCATION,   //定位权限
             Manifest.permission.READ_PHONE_STATE        //访问手机联系人等权限
+            ,Manifest.permission.CAMERA
     };
 
 

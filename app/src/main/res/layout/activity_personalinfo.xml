@@ -9,12 +9,11 @@
     <android.support.v7.widget.Toolbar
         android:id="@+id/text_ps_back"
         android:layout_width="match_parent"
-        android:layout_height="?actionBarSize"
+        android:layout_height="30dp"
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
    />
-
         <LinearLayout style="@style/wrap_layout" >
             <!-- 上圆角-->
             <LinearLayout style="@style/top_layout">

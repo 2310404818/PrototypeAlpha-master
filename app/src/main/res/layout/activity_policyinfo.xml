@@ -9,7 +9,7 @@
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbarPolicyinfo"
         android:layout_width="411dp"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
@@ -22,7 +22,7 @@
             android:layout_gravity="center"
             android:text="政策详情"
             android:textColor="@color/color_white"
-            android:textSize="24sp" />
+            android:textSize="20sp" />
     </android.support.v7.widget.Toolbar>
 
     <LinearLayout

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:id="@+id/action_title"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="签到"
+            android:textColor="@color/color_gray6"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/came_back"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:gravity="center_vertical"
+            android:clickable="true"
+            android:textColor="@drawable/selector"
+            android:text="返回"
+            android:textSize="15sp" />
+    </RelativeLayout>
+    <View style="@style/base_divider_line" />
+    <ImageView
+        android:src="@drawable/camera2"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_gravity="center"
+        android:id="@+id/ivView"/>
+
+    <View style="@style/base_divider_line" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp"
+        android:textSize="20sp"
+        android:text="备注详细情况"/>
+
+    <EditText
+        android:id="@+id/Remarks_details"
+        android:layout_width="fill_parent"
+        android:hint="请备注情况"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:ems="10"
+        android:inputType="text"
+        android:maxLines="20"
+        android:textSize="25sp" />
+
+
+    <Button
+            android:text="签到"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:id="@+id/button"/>
+
+</LinearLayout>

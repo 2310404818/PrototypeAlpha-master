@@ -8,7 +8,7 @@
     <android.support.v7.widget.Toolbar
         android:id="@+id/list_back"
         android:layout_width="match_parent"
-        android:layout_height="?actionBarSize"
+        android:layout_height="30dp"
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:text="录音列表"
         android:textColor="@android:color/white"
-        android:textSize="24sp"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/list_back"
         app:layout_constraintEnd_toEndOf="@+id/list_back"
         app:layout_constraintStart_toStartOf="@+id/list_back"

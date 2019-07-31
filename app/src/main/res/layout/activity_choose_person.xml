@@ -10,7 +10,7 @@
     tools:context=".activity.ChoosePerson">
     <android.support.v7.widget.Toolbar
         android:id="@+id/tlb_person"
-        android:layout_height="?actionBarSize"
+        android:layout_height="30dp"
         android:layout_width="match_parent"
         android:background="?attr/colorPrimary"
         android:theme="?attr/actionBarTheme">
@@ -22,7 +22,7 @@
             android:layout_gravity="center"
             android:text="添加检查人"
             android:textColor="@color/color_white"
-            android:textSize="24sp" />
+            android:textSize="20sp" />
 
     </android.support.v7.widget.Toolbar>
 

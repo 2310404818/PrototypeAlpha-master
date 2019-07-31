@@ -9,7 +9,7 @@
     <android.support.v7.widget.Toolbar
         android:id="@+id/tlb_history"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
@@ -28,7 +28,7 @@
         android:layout_marginRight="8dp"
         android:text="检查记录"
         android:textColor="@android:color/white"
-        android:textSize="24sp"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/tlb_history"
         app:layout_constraintEnd_toEndOf="@+id/tlb_history"
         app:layout_constraintStart_toStartOf="@+id/tlb_history"

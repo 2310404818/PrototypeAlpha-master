@@ -30,6 +30,18 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
+    <!--地图包、搜索包需要的基础权限 -->
+    <!-- 可以提高室内定位的精确度 -->
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <!-- 可以提高室内定位的精确度 -->
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <!-- 用于提高GPS定位速度 -->
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+
+    <uses-permission android:name="android.permission.CAMERA"/>
+
+
+
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
@@ -40,22 +52,6 @@
         android:theme="@style/AppTheme.NoActionBar"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
-
-        <!-- <meta-data -->
-        <!-- android:name="TencentMapSDK" -->
-        <!-- android:value="FYWBZ-I5R3I-IJGGH-5CDPA-Q4RBO-WXFCD"/> -->
-
-        <meta-data
-            android:name="com.baidu.lbsapi.API_KEY"
-            android:value="l2NHeq7hESqLOHVNOLlHeG47G7BIY08I" />
-        <meta-data
-            android:name="com.amap.api.v2.apikey"
-            android:value="6bdd815d73fabc197e5586ef4226bdb7" />
-
-        <service
-            android:name="com.baidu.location.f"
-            android:enabled="true"
-            android:process=":remote" />
 
         <activity
             android:name=".activity.PhoneNumberLoginActivity"
@@ -80,9 +76,6 @@
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".swj.CheckPerson"
-            android:windowSoftInputMode="adjustPan" />
-        <activity
-            android:name=".swj.AddLocActivity"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".swj.StartActivity"
@@ -145,7 +138,18 @@
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
+        <!--7/30添加-->
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="81d05d9d10576a6bc7cf4bfd27fd9082" />
+        <!-- 声明定位service -->
+        <service android:name="com.amap.api.location.APSService" />
+        <activity
+            android:name=".activity.SignedActivity"
+            android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".activity.PhotoSignInActivity"></activity>
 
+        <!--7/30添加-->
 
     </application>
 
