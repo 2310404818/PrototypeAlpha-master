@@ -2,13 +2,9 @@ package com.swj.prototypealpha.swj.util.RecyclerViewHelper;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,7 +12,6 @@ import com.swj.prototypealpha.R;
 import com.swj.prototypealpha.swj.util.ItemBean;
 import com.swj.prototypealpha.swj.util.OnItemClickListener;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
