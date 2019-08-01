@@ -326,7 +326,7 @@ public class CheckPerson extends AppCompatActivity implements OnItemClickListene
                                 Update();
                                 Bitmap checker = BitmapFactory.decodeResource(getResources(),R.mipmap.checker);
                                 Bitmap rightArrow = BitmapFactory.decodeResource(getResources(),R.mipmap.right_arrow);
-                                ItemBean itemBean5 = new ItemBean("当前项目","进入",checker,rightArrow);
+                                ItemBean itemBean5 = new ItemBean("当前检查","未提交",checker,rightArrow);
                                 itemList.add(itemBean5);
                                 adapter.notifyDataSetChanged();
                             }

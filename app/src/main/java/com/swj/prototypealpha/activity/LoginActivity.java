@@ -439,7 +439,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 }
                 editor.apply();
                 shouDiag();
-                LoginRequest(user_name,pass_this);
+                boolean phone = isPhone(user_name);
+                boolean pass = isCorrect(pass_this);
+                if (phone && pass){
+                    LoginRequest(user_name,pass_this);
+                }
+
                 break;
             case R.id.accountlogin:
                 intent = new Intent(LoginActivity.this, PhoneNumberLoginActivity.class);

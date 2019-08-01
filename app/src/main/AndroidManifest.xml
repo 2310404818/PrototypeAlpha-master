@@ -27,7 +27,6 @@
     <!-- 允许程序发送短信 -->
     <uses-permission android:name="android.permission.SEND_SMS" />
     <!-- 往内存寫入和錄音權限 -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <!--地图包、搜索包需要的基础权限 -->

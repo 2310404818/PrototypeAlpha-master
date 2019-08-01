@@ -1,6 +1,7 @@
 package com.swj.prototypealpha.activity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -154,6 +155,7 @@ public class PhotoSignInActivity extends AppCompatActivity {
             encodeImagetoString();
     }
 
+    @SuppressLint("StaticFieldLeak")
     public void encodeImagetoString() {
         new AsyncTask<Void, Void, String>() {
 
@@ -170,7 +172,7 @@ public class PhotoSignInActivity extends AppCompatActivity {
                         options);
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 // 压缩图片
-                bitmap.compress(Bitmap.CompressFormat.PNG, 50, stream);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream);
                 byte[] byte_arr = stream.toByteArray();
                 // Base64图片转码为String
                 encodedString = Base64.encodeToString(byte_arr, 0);

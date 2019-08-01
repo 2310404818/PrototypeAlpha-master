@@ -35,6 +35,7 @@ import com.amap.api.maps.LocationSource;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.model.CameraPosition;
 import com.amap.api.maps.model.LatLng;
+import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.MyLocationStyle;
 import com.amap.api.services.core.LatLonPoint;
@@ -64,9 +65,8 @@ import java.util.Map;
 
 
 /**
- * Created by mardawang on 2017/7/6.
- * <p>
- * wy363681759@163.com
+ * 定位界面
+ * 实现定位、附近相关兴趣点的列表，相机签到的跳转
  */
 
 public class SignedActivity extends AppCompatActivity implements View.OnClickListener, AMapLocationListener, LocationSource, PoiSearch.OnPoiSearchListener, AMap.OnCameraChangeListener {
@@ -94,6 +94,8 @@ public class SignedActivity extends AppCompatActivity implements View.OnClickLis
     private PoiSearch.SearchBound searchBound;
     private String city;
     private ArrayList<PoiItem> poiItems;
+    private ArrayList<PoiItem> poiItems1;
+    private ArrayList<Marker> markers = new ArrayList<>();
     private NearbyAdapter mAdapter;
     private String Latitude = "112.946615";
     private String longitude = "28.179526";
@@ -102,6 +104,8 @@ public class SignedActivity extends AppCompatActivity implements View.OnClickLis
     private LatLng latlng;
     private String key_search;
     private static final int LOCATION_PERMISSION_CODE = 100;
+    private Marker marker;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -184,7 +188,7 @@ public class SignedActivity extends AppCompatActivity implements View.OnClickLis
             requestPermission(LOCATION_PERMISSION_CODE);
         } else {
             //已经获得权限，则执行定位请求。
-            Toast.makeText(SignedActivity.this, "已获取定位权限",Toast.LENGTH_SHORT).show();
+    //        Toast.makeText(SignedActivity.this, "已获取定位权限",Toast.LENGTH_SHORT).show();
 
             startLocation();
 
@@ -248,7 +252,7 @@ public class SignedActivity extends AppCompatActivity implements View.OnClickLis
                 Latitude = String.valueOf(amapLocation.getLatitude());
                 longitude = String.valueOf(amapLocation.getLongitude());
                 posName = amapLocation.getPoiName();
-//                System.out.println("经纬度及地名"+"     "+Latitude+"   "+longitude+"    "+posName);
+                System.out.println("经纬度及地名"+"     "+Latitude+"   "+longitude+"    "+posName);
                 mAmap.animateCamera(CameraUpdateFactory.newLatLngZoom(latlng, 17), 1000, null);
                 key_search = amapLocation.getPoiName();
 
@@ -264,9 +268,10 @@ public class SignedActivity extends AppCompatActivity implements View.OnClickLis
                 // 如果不设置标志位，此时再拖动地图时，它会不断将地图移动到当前的位置
                 if (isFirstLoc) {
                     et_key.setHint(key_search);
-
                     //添加图钉
-                    mAmap.addMarker(getMarkerOptions(amapLocation));
+                    marker = mAmap.addMarker(getMarkerOptions(amapLocation));
+                    System.out.println("marker的值："+marker);
+                    markers.add(marker);
                     isFirstLoc = false;
                 }
             } else {
@@ -326,7 +331,7 @@ public class SignedActivity extends AppCompatActivity implements View.OnClickLis
         poiSearch.setOnPoiSearchListener(this);//设置回调数据的监听器
         //点附近2000米内的搜索结果
         LatLonPoint lp = new LatLonPoint(latlng.latitude, latlng.longitude);
-        poiSearch.setBound(new PoiSearch.SearchBound(lp, 5000, true));
+        poiSearch.setBound(new PoiSearch.SearchBound(lp, 300, true));
         poiSearch.searchPOIAsyn();//开始搜索
     }
 
@@ -335,6 +340,7 @@ public class SignedActivity extends AppCompatActivity implements View.OnClickLis
         switch (v.getId()) {
             case R.id.btn_search:
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                markers = mAdapter.getmarkers();
                 if (imm.isActive() && getCurrentFocus() != null) {
                     if (getCurrentFocus().getWindowToken() != null) {
                         imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
@@ -351,6 +357,7 @@ public class SignedActivity extends AppCompatActivity implements View.OnClickLis
                 finish();
                 break;
             case R.id.tv_commit:
+                posName = mAdapter.getPosName();
                 SignedRequest(Latitude,longitude,posName);
                 break;
         }
@@ -395,13 +402,12 @@ public class SignedActivity extends AppCompatActivity implements View.OnClickLis
     public void onPoiSearched(PoiResult poiResult, int i) {
         if (i == 1000) {
             Log.i("---", "查询结果:" + i);
-            if (poiResult != null && poiResult.getQuery() != null) {// 搜索poi的结果
+            if (poiResult != null && poiResult.getQuery() != null) {// 搜索poi的结果。
                 poiItems = poiResult.getPois();// 取得第一页的poiitem数据，页数从数字0开始
-                removeloc(poiItems,100);
-                if (poiItems != null && poiItems.size() > 0) {
-                    mAdapter = new NearbyAdapter(this, poiItems);
-                    lv_view.setAdapter(mAdapter);
-                }
+                System.out.println("markers的内容："+markers);
+                mAdapter = new NearbyAdapter(this, poiItems,posName,mAmap,markers);
+                System.out.println("经纬度及地名"+"     "+Latitude+"   "+longitude+"    "+posName);
+                lv_view.setAdapter(mAdapter);
             }
         } else if (i == 27) {
             Log.e("---", "error_network");
@@ -426,7 +432,7 @@ public class SignedActivity extends AppCompatActivity implements View.OnClickLis
     public void onCameraChangeFinish(CameraPosition cameraPosition) {
         latlng = cameraPosition.target;
         mAmap.clear();
-        mAmap.addMarker(new MarkerOptions().position(latlng));
+        lv_view.setAdapter(mAdapter);
         getNearbyInfo(key_search);
     }
 
@@ -542,6 +548,7 @@ public class SignedActivity extends AppCompatActivity implements View.OnClickLis
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
+
                 params.put("Latitude", Latitude);  //注⑥
                 params.put("Longitude", longitude);
                 params.put("posName", posName);
